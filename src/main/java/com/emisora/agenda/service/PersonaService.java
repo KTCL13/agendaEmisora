@@ -1,9 +1,9 @@
-package com.emisora.service;
+package com.emisora.agenda.service;
 
-import com.emisora.dto.PersonaDTO;
-import com.emisora.dto.RolDTO;
-import com.emisora.model.Persona;
-import com.emisora.repository.PersonaRepository;
+import com.emisora.agenda.dto.PersonaDTO;
+import com.emisora.agenda.dto.RolDTO;
+import com.emisora.agenda.model.Persona;
+import com.emisora.agenda.repository.PersonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

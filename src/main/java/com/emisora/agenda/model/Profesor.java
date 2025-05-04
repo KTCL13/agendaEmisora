@@ -1,4 +1,4 @@
-package com.emisora.model;
+package com.emisora.agenda.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -6,22 +6,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Funcionario implements Rol {
+public class Profesor implements Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String departamento;
+    private String facultad;
 
-    public Funcionario() {}
+    public Profesor() {}
 
-    public Funcionario(String departamento) {
-        this.departamento = departamento;
+    public Profesor(String facultad) {
+        this.facultad = facultad;
     }
 
     @Override
     public String getDescripcion() {
-        return "Departamento: " + departamento;
+        return "Facultad: " + facultad;
     }
 
     public Long getId() {
@@ -30,11 +30,11 @@ public class Funcionario implements Rol {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getDepartamento() {
-        return departamento;
+    public String getFacultad() {
+        return facultad;
     }
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
+    public void setFacultad(String facultad) {
+        this.facultad = facultad;
     }
 
 }

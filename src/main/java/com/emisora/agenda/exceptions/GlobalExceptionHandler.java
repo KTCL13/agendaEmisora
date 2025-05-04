@@ -1,4 +1,4 @@
-package com.emisora.exceptions;
+package com.emisora.agenda.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
