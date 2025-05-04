@@ -1,4 +1,4 @@
-package com.emisora.dto;
+package com.emisora.agenda.dto;
 
 public class RolDTO {
     private String tipo;

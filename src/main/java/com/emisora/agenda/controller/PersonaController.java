@@ -1,7 +1,7 @@
-package com.emisora.controller;
+package com.emisora.agenda.controller;
 
-import com.emisora.dto.PersonaDTO;
-import com.emisora.service.PersonaService;
+import com.emisora.agenda.dto.PersonaDTO;
+import com.emisora.agenda.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

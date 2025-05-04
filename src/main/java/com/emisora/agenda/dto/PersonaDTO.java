@@ -1,4 +1,4 @@
-package com.emisora.dto;
+package com.emisora.agenda.dto;
 
 import java.util.List;
 

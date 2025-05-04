@@ -1,4 +1,4 @@
-package com.emisora.model;
+package com.emisora.agenda.model;
 
 public interface Rol {
     String getDescripcion();
