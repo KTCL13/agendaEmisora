@@ -5,6 +5,7 @@ import com.emisora.agenda.dto.RolDTO;
 import com.emisora.agenda.model.Persona;
 import com.emisora.agenda.repository.PersonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class PersonaService {
 
     @Autowired
     private PersonaRepository personaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public PersonaDTO crearPersona(PersonaDTO personaDTO) {
         Persona persona = convertirAPersona(personaDTO);
@@ -32,6 +36,8 @@ public class PersonaService {
         Persona persona = new Persona();
         persona.setNombre(dto.getNombre());
         persona.setCorreo(dto.getCorreo());
+        persona.setUsername(dto.getUsername());
+        persona.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         List<String> roles = dto.getRoles().stream()
                 .map(RolDTO::getTipo)
@@ -46,6 +52,13 @@ public class PersonaService {
                 .map(r -> new RolDTO(r))
                 .collect(Collectors.toList());
 
-        return new PersonaDTO(persona.getNombre(), persona.getCorreo(), rolDTOs);
+        // Usamos constructor que incluye: nombre, correo, roles
+        return new PersonaDTO(
+                persona.getNombre(),
+                persona.getCorreo(),
+                persona.getUsername(),
+                null, // No devolver contraseña en respuesta
+                rolDTOs
+        );
     }
 }
