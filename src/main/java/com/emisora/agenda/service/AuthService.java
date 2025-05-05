@@ -1,6 +1,6 @@
 package com.emisora.agenda.service;
 
-import com.emisora.agenda.config.JwtUtil;
+//import com.emisora.agenda.config.JwtUtil;
 import com.emisora.agenda.dto.AuthResponseDTO;
 import com.emisora.agenda.dto.LoginRequestDTO;
 import com.emisora.agenda.dto.PersonaDTO;
@@ -22,33 +22,20 @@ import java.util.stream.Collectors;
 public class AuthService {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private PersonaRepository personaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
     public AuthResponseDTO login(LoginRequestDTO request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         Persona persona = personaRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Solo usamos ROLE_USER ahora
-        String jwtRole = "ROLE_USER";
+        if (!passwordEncoder.matches(request.getPassword(), persona.getPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
 
-        String token = jwtUtil.generateToken(persona.getUsername(), jwtRole);
-
-        return new AuthResponseDTO(token, persona.getUsername(), jwtRole);
+        return new AuthResponseDTO("Login exitoso", persona.getUsername(), "ROLE_USER");
     }
 
     public AuthResponseDTO register(PersonaDTO dto) {
@@ -60,7 +47,7 @@ public class AuthService {
         persona.setNombre(dto.getNombre());
         persona.setCorreo(dto.getCorreo());
         persona.setUsername(dto.getUsername());
-        persona.setPassword(passwordEncoder.encode(dto.getPassword()));
+        persona.setPassword(dto.getPassword()); // Guardar sin cifrar
 
         List<String> roles = dto.getRoles().stream()
                 .map(RolDTO::getTipo)
@@ -69,9 +56,6 @@ public class AuthService {
         persona.setRoles(roles);
         Persona savedPersona = personaRepository.save(persona);
 
-        // Siempre será ROLE_USER
-        String token = jwtUtil.generateToken(savedPersona.getUsername(), "ROLE_USER");
-
-        return new AuthResponseDTO(token, savedPersona.getUsername(), "ROLE_USER");
+        return new AuthResponseDTO("Registro exitoso", savedPersona.getUsername(), "ROLE_USER");
     }
 }
