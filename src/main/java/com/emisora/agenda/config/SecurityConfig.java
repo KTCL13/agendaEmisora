@@ -1,7 +1,5 @@
 package com.emisora.agenda.config;
 
-import com.emisora.agenda.model.Persona;
-import com.emisora.agenda.repository.PersonaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.emisora.agenda.model.Persona;
+import com.emisora.agenda.repository.PersonaRepository;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -27,11 +28,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/login", "/","/static/**", "/assets/**", "/index.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+            
         return http.build();
     }
 
