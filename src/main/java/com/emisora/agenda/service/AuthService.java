@@ -71,7 +71,8 @@ public class AuthService {
         persona.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         List<String> roles = dto.getRoles().stream()
-                .map(RolDTO::getTipo)
+                .map(r -> r.getTipo())
+                .map(tipo -> tipo.startsWith("ROLE_") ? tipo : "ROLE_" + tipo)
                 .collect(Collectors.toList());
 
         persona.setRoles(roles);
