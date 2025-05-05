@@ -14,11 +14,9 @@ public class JwtUtil {
     private final long EXPIRATION = 864_000_000; // 10 días
 
     public String generateToken(String username, String role) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role);
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(username)
+                .claim("role", role)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();

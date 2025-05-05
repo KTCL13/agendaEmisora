@@ -34,36 +34,28 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     public AuthResponseDTO login(LoginRequestDTO request) {
-
-        //1. Autenticar al usuario usando el AuthenticationManager
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        //2. Establecer autenticación en el contexto de seguridad
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //3. Buscar persona por username
         Persona persona = personaRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        //4. Determinar rol para el token: ROLE_ADMIN si contiene "ROLE_ADMIN"
-        String jwtRole = persona.getRoles().contains("ROLE_ADMIN") ? "ROLE_ADMIN" : "ROLE_USER";
+        // Solo usamos ROLE_USER ahora
+        String jwtRole = "ROLE_USER";
 
-        //5. Generar token JWT
         String token = jwtUtil.generateToken(persona.getUsername(), jwtRole);
 
-        //6. Devolver respuesta con token
         return new AuthResponseDTO(token, persona.getUsername(), jwtRole);
     }
 
     public AuthResponseDTO register(PersonaDTO dto) {
-        // Verificar si ya existe el username
         if (personaRepository.findByUsername(dto.getUsername()).isPresent()) {
             throw new RuntimeException("Nombre de usuario ya está en uso");
         }
 
-        // Convertir DTO a Entidad
         Persona persona = new Persona();
         persona.setNombre(dto.getNombre());
         persona.setCorreo(dto.getCorreo());
@@ -71,19 +63,15 @@ public class AuthService {
         persona.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         List<String> roles = dto.getRoles().stream()
-                .map(r -> r.getTipo())
-                .map(tipo -> tipo.startsWith("ROLE_") ? tipo : "ROLE_" + tipo)
+                .map(RolDTO::getTipo)
                 .collect(Collectors.toList());
 
         persona.setRoles(roles);
-
-        // Guardar en la base de datos
         Persona savedPersona = personaRepository.save(persona);
 
-        // Generar token JWT
-        String jwtRole = savedPersona.getRoles().contains("ROLE_ADMIN") ? "ROLE_ADMIN" : "ROLE_USER";
-        String token = jwtUtil.generateToken(savedPersona.getUsername(), jwtRole);
+        // Siempre será ROLE_USER
+        String token = jwtUtil.generateToken(savedPersona.getUsername(), "ROLE_USER");
 
-        return new AuthResponseDTO(token, savedPersona.getUsername(), jwtRole);
+        return new AuthResponseDTO(token, savedPersona.getUsername(), "ROLE_USER");
     }
 }
