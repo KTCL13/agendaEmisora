@@ -31,26 +31,25 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     public AuthResponseDTO login(LoginRequestDTO request) {
-        // Autenticar al usuario
+        // 1. Autenticar al usuario usando el AuthenticationManager
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        // Establecer autenticación en el contexto de seguridad
+        // 2. Establecer autenticación en el contexto de seguridad
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Buscar persona por username
-        Optional<Persona> optionalPersona = personaRepository.findByUsername(request.getUsername());
-        Persona persona = optionalPersona.orElseThrow(() ->
-                new RuntimeException("Usuario no encontrado"));
+        // 3. Buscar persona por username
+        Persona persona = personaRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Determinar rol para el token: ROLE_ADMIN solo si está en la lista
+        // 4. Determinar rol para el token: ROLE_ADMIN si contiene "ROLE_ADMIN"
         String jwtRole = persona.getRoles().contains("ROLE_ADMIN") ? "ROLE_ADMIN" : "ROLE_USER";
 
-        // Generar token JWT
+        // 5. Generar token JWT
         String token = jwtUtil.generateToken(persona.getUsername(), jwtRole);
 
-        // Devolver respuesta con token
+        // 6. Devolver respuesta con token
         return new AuthResponseDTO(token, persona.getUsername(), jwtRole);
     }
 }
