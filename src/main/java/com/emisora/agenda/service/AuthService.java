@@ -31,12 +31,16 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
     public AuthResponseDTO login(LoginRequestDTO request) {
-        // 1. Autenticar al usuario usando el AuthenticationManager
+        /**
+         * 1. Autenticar al usuario usando el AuthenticationManager
+         */
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        // 2. Establecer autenticación en el contexto de seguridad
+        /**
+         * 2. Establecer autenticación en el contexto de seguridad
+         */
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 3. Buscar persona por username
