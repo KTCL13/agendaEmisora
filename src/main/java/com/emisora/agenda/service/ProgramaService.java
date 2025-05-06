@@ -14,20 +14,29 @@ import com.emisora.agenda.repository.ProgramaRepository;
 @Service
 public class ProgramaService {
 
+    private final ProgramaRepository programaRepository;
+    private final ProgramaMapper programaMapper;
+
     @Autowired
-    private ProgramaRepository programaRepository;
+    public ProgramaService(ProgramaRepository programaRepository, ProgramaMapper programaMapper) {
+        this.programaRepository = programaRepository;
+        this.programaMapper = programaMapper;
+    }
 
     public List<ProgramaDTO> getAllProgramas() {
-
         List<Programa> programas = programaRepository.findAll();
         
         return programas.stream()
-                .map(ProgramaMapper.INSTANCE::toDto).collect(Collectors.toList());
+                .map(programaMapper::toDto).collect(Collectors.toList());
     }
 
     public ProgramaDTO savePrograma(ProgramaDTO programaDTO) {
-        Programa programa = programaRepository.save(ProgramaMapper.INSTANCE.toEntity(programaDTO));
-        return ProgramaMapper.INSTANCE.toDto(programa);
+        Programa programa = programaRepository.save(programaMapper.toEntity(programaDTO));
+        return programaMapper.toDto(programa);
+    }
+
+    public void deletePrograma(Long id) {
+        programaRepository.deleteById(id);
     }
 
     

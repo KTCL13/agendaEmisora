@@ -20,8 +20,9 @@ public class Programa {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String codigo;
     private String titulo;
     private String descripcion;
-    private String tipo;
+    private String categoria;
     private Date fechaCreacion;
 }

@@ -11,8 +11,10 @@ public class ProgramaDTO {
 
 
     private Long id;
-    private String tipo;
+    private String codigo;
+    private String categoria;
     private String titulo;
     private String descripcion;
+    private String fechaCreacion;
 
 }

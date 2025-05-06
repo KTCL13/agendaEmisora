@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,19 @@ public class ProgramaController {
     public ResponseEntity<ProgramaDTO> savePrograma(@RequestBody ProgramaDTO programaDTO) {
         ProgramaDTO ProgramaAdded = programaService.savePrograma(programaDTO);
         return new ResponseEntity<>(ProgramaAdded, HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/updatePrograma")
+    public ResponseEntity<ProgramaDTO> updatePrograma(@RequestBody ProgramaDTO programaDTO) {
+        ProgramaDTO updatedPrograma = programaService.savePrograma(programaDTO);
+        return new ResponseEntity<>(updatedPrograma, HttpStatus.OK);}
+
+
+    @DeleteMapping("/deletePrograma")
+    public ResponseEntity<Void> deletePrograma(@RequestBody Long id) {
+        programaService.deletePrograma(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     
