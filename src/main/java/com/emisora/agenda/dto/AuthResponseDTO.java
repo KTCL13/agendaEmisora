@@ -1,16 +1,12 @@
 package com.emisora.agenda.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class AuthResponseDTO {
-    private String token;
+    private String message;
     private String username;
     private String role;
-
-    public AuthResponseDTO(String token, String username, String role) {
-        this.token = token;
-        this.username = username;
-        this.role = role;
-    }
 }

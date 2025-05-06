@@ -1,3 +1,4 @@
+/*
 package com.emisora.agenda.config;
 
 import java.io.IOException;
@@ -59,4 +60,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-}
+}*/
