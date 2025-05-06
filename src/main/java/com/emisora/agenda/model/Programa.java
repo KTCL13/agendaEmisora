@@ -1,5 +1,7 @@
 package com.emisora.agenda.model;
 
+import java.sql.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,4 +23,5 @@ public class Programa {
     private String titulo;
     private String descripcion;
     private String tipo;
+    private Date fechaCreacion;
 }

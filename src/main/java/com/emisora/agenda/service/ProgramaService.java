@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.emisora.agenda.dto.ProgramaDTO;
 import com.emisora.agenda.mapper.ProgramaMapper;
 import com.emisora.agenda.model.Programa;
-import com.emisora.agenda.repo.ProgramaRepository;
+import com.emisora.agenda.repository.ProgramaRepository;
 
 @Service
 public class ProgramaService {

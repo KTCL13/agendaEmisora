@@ -1,16 +1,34 @@
 package com.emisora.agenda.dto;
 
 import java.util.List;
+import jakarta.validation.constraints.*;
 
 public class PersonaDTO {
+
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
+
+    @NotBlank(message = "El correo es obligatorio")
+    @Email(message = "Debe ser un correo válido")
     private String correo;
+
+    @NotBlank(message = "El nombre de usuario es obligatorio")
+    @Size(min = 4, max = 20, message = "El username debe tener entre 4 y 20 caracteres")
     private String username;
+
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
+
+    @NotNull(message = "Debe asignar al menos un rol")
+    @Size(min = 1, message = "Debe seleccionar al menos un rol")
     private List<RolDTO> roles;
 
     public PersonaDTO() {}
 
+    /**
+     *Constructor completo
+     */
     public PersonaDTO(String nombre, String correo, String username, String password, List<RolDTO> roles) {
         this.nombre = nombre;
         this.correo = correo;
@@ -19,7 +37,15 @@ public class PersonaDTO {
         this.roles = roles;
     }
 
-    // Getters y setters
+    /**
+     *Constructor sin password
+     */
+    public PersonaDTO(String nombre, String correo, List<RolDTO> roles) {
+        this.nombre = nombre;
+        this.correo = correo;
+        this.roles = roles;
+    }
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
