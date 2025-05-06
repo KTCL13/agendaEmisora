@@ -1,3 +1,4 @@
+/*
 package com.emisora.agenda.config;
 
 import lombok.RequiredArgsConstructor;
@@ -51,4 +52,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-}
+}*/
