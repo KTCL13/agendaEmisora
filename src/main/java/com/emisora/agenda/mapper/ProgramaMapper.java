@@ -2,7 +2,6 @@ package com.emisora.agenda.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -3,7 +3,6 @@ package com.emisora.agenda.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.emisora.agenda.dto.ProgramaDTO;
@@ -17,7 +16,7 @@ public class ProgramaService {
     private final ProgramaRepository programaRepository;
     private final ProgramaMapper programaMapper;
 
-    @Autowired
+
     public ProgramaService(ProgramaRepository programaRepository, ProgramaMapper programaMapper) {
         this.programaRepository = programaRepository;
         this.programaMapper = programaMapper;
