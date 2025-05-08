@@ -31,14 +31,14 @@ public class AuthController {
     public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto) {
         UserDto user =userService.login(credentialsDto);
 
-        user.setToken(userAuthProvider.createToken(user.getLogin()));
+        user.setToken(userAuthProvider.createToken(user));
         return ResponseEntity.ok(user);
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody @Valid SignUpDto user) {
         UserDto createdUser = userService.register(user);
-        createdUser.setToken(userAuthProvider.createToken(user.getLogin()));
+        createdUser.setToken(userAuthProvider.createToken(createdUser));
         return ResponseEntity.created(URI.create("/users/" + createdUser.getId())).body(createdUser);
     }
 }
