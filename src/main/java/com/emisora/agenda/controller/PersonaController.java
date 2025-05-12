@@ -17,15 +17,15 @@ public class PersonaController {
     @Autowired
     private PersonaService personaService;
 
-    @PostMapping
-    public ResponseEntity<PersonaDTO> crearPersona(@RequestBody @Valid PersonaDTO personaDTO) {
+    @PostMapping ("/crearPersona")
+    public ResponseEntity<PersonaDTO> crearPersona(@RequestBody PersonaDTO personaDTO) {
         PersonaDTO nuevaPersona = personaService.crearPersona(personaDTO);
         return new ResponseEntity<>(nuevaPersona, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<PersonaDTO>> obtenerTodasLasPersonas() {
-        List<PersonaDTO> personas = personaService.obtenerTodasLasPersonas();
+    @GetMapping ("/allPersonas")
+    public ResponseEntity<List<PersonaDTO>> getAllPersonas() {
+        List<PersonaDTO> personas = personaService.getAllPersonas();
         return new ResponseEntity<>(personas, HttpStatus.OK);
     }
 }

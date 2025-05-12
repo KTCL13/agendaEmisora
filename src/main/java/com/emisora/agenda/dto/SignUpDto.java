@@ -1,5 +1,7 @@
 package com.emisora.agenda.dto;
 
+import javax.management.relation.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +17,5 @@ public class SignUpDto {
     private String email;
     private String login;
     private String password;
+    private String role;
 }
