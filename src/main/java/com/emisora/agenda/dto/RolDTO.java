@@ -1,22 +1,25 @@
 package com.emisora.agenda.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
+@Data
 public class RolDTO {
-    @NotBlank(message = "El tipo de rol es obligatorio")
-    private String tipo;
+    
+    private Long rolId;
+    
+    @NotBlank
+    private String tipoRol;
 
-    public RolDTO() {}
+    
+    private String carrera;
+    private int semestre;
 
-    public RolDTO(String tipo) {
-        this.tipo = tipo;
-    }
+    private String departamento;
+    private String cargo;
+    private String codigoUniversidad;
 
-    public String getTipo() {
-        return tipo;
-    }
+    private String ocupacion;
+    private String facultad;
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 }

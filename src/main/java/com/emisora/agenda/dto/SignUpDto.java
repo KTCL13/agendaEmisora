@@ -1,6 +1,5 @@
 package com.emisora.agenda.dto;
 
-import javax.management.relation.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

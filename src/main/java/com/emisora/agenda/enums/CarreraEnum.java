@@ -1,4 +1,4 @@
-package com.emisora.agenda.model;
+package com.emisora.agenda.enums;
 
 public enum CarreraEnum {
 

@@ -1,7 +1,8 @@
 package com.emisora.agenda.repository;
 
-import com.emisora.agenda.model.Persona;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.emisora.agenda.model.personas.Persona;
 
 
 public interface PersonaRepository extends JpaRepository<Persona, Long> {}

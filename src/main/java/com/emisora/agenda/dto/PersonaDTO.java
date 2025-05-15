@@ -1,5 +1,9 @@
 package com.emisora.agenda.dto;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,21 +11,29 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonaDTO {
+public class PersonaDTO {  
 
     private Long id;
-    public String nombre;
-    public String apellido;
-    public String correo;
-    public String cedula;
-    public String tipo; 
 
-    // Campos opcionales según el tipo
-    public String codigoUniversidad;
-    public String carrera;
-    public String cargo;
-    public String facultad;
-    public String ocupacion;
-    public Integer semestre;
-    public String departamento;
+    @NotBlank
+    private String nombres;
+
+    @NotBlank
+    private String apellidos;
+
+    @NotBlank
+    private String telefono;
+
+    @NotBlank
+    private String correo;
+
+    @NotBlank
+    private String numeroId;
+
+    @NotBlank
+    private String tipoId; 
+
+    @Valid
+    private List<RolDTO> roles;
+
 }

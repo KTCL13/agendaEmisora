@@ -1,15 +1,19 @@
-package com.emisora.agenda.model;
+package com.emisora.agenda.model.personas;
 
+import com.emisora.agenda.enums.CarreraEnum;
+
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
+@DiscriminatorValue("ESTUDIANTE")
 @Data
-@Table(name = "estudiantes")
-public class Estudiante extends Persona {
+@EqualsAndHashCode(callSuper = true)
+public class EstudianteRol extends Rol {
     
     @Enumerated(EnumType.STRING) 
     private CarreraEnum carrera;
