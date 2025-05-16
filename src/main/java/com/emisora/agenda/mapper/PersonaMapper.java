@@ -1,4 +1,6 @@
 package com.emisora.agenda.mapper;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,5 +23,7 @@ public interface PersonaMapper {
 
    
     Persona dtoToPersona(PersonaDTO dto);
+
+    List<PersonaDTO> toDtoList(List<Persona> personas);
 }
    

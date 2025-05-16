@@ -26,7 +26,7 @@ public class Persona {
     private String correo;
     private String numeroId;
 
-    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Rol> roles = new ArrayList<>();
     
 
