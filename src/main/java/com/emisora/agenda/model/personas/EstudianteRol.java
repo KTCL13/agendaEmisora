@@ -17,7 +17,6 @@ public class EstudianteRol extends Rol {
     
     @Enumerated(EnumType.STRING) 
     private CarreraEnum carrera;
-    private String codigoUniversidad;
-    private int semestre;
+    private String codigoEstudiante;
 
 }

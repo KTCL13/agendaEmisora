@@ -22,8 +22,7 @@ public interface RolMapper {
         @Mapping(target = "persona", ignore = true), // persona se establece en la lógica de servicio
         // Mapeos explícitos para los campos de EstudianteRol desde RolDTO:
         @Mapping(source = "carrera", target = "carrera", qualifiedByName = "stringToCarreraEnumInternal"),
-        @Mapping(source = "semestre", target = "semestre"),
-        @Mapping(source = "codigoUniversidad", target = "codigoUniversidad"),
+        @Mapping(source = "codigoEstudiante", target = "codigoEstudiante"),
     })
     EstudianteRol dtoToEstudianteRol(RolDTO dto);
 
@@ -33,7 +32,6 @@ public interface RolMapper {
    
         @Mapping(source = "carrera", target = "carrera", qualifiedByName = "stringToCarreraEnumInternal"),
 
-        @Mapping(source = "codigoUniversidad", target = "codigoUniversidad"),
         @Mapping(source = "facultad", target = "facultad")
     })
     ProfesorRol dtoToProfesorRol(RolDTO dto);
@@ -41,16 +39,13 @@ public interface RolMapper {
     @Mappings({
         @Mapping(target = "rolId", ignore = true),
         @Mapping(target = "persona", ignore = true),
-        @Mapping(source = "ocupacion", target = "ocupacion")
     })
     InvitadoRol dtoToInvitadoRol(RolDTO dto);
 
     @Mappings({
         @Mapping(target = "rolId", ignore = true),
         @Mapping(target = "persona", ignore = true),
-        @Mapping(source = "cargo", target = "cargo"),
-        @Mapping(source = "departamento", target = "departamento"),
-        @Mapping(source = "codigoUniversidad", target = "codigoUniversidad")
+        @Mapping(source = "dependencia", target = "dependencia")
     })
     FuncionarioRol dtoToFuncionarioRol(RolDTO dto);
 
@@ -83,45 +78,26 @@ public interface RolMapper {
     // Para cada tipo concreto de Rol a RolResponseDTO
     @Mappings({
     @Mapping(target = "tipoRol", constant = "ESTUDIANTE"),
-    @Mapping(target = "semestre", source = "semestre"),
     @Mapping(source = "carrera", target = "carrera", qualifiedByName = "carreraEnumToStringInternal"), 
-    @Mapping(target = "codigoUniversidad", source = "codigoUniversidad"),
-    @Mapping(target = "cargo", ignore = true),
-    @Mapping(target = "departamento", ignore = true),
-    @Mapping(target = "facultad", ignore = true),
-    @Mapping(target = "ocupacion", ignore = true)
+    @Mapping(target = "codigoEstudiante", source = "codigoEstudiante"),
     })
     RolDTO estudianteRolToDTO(EstudianteRol estudianteRol);
 
     @Mappings({
     @Mapping(target = "tipoRol", constant = "PROFESOR"),
-    @Mapping(target = "codigoUniversidad", source = "codigoUniversidad"),
     @Mapping(source = "carrera", target = "carrera", qualifiedByName = "carreraEnumToStringInternal"), 
     @Mapping(target = "facultad", source = "facultad"),
-    @Mapping(target = "cargo", ignore = true),
-    @Mapping(target = "departamento", ignore = true),
-    @Mapping(target = "semestre", ignore = true),
-    @Mapping(target = "ocupacion", ignore = true)
     })
     RolDTO profesorRolToDTO(ProfesorRol profesorRol);
 
     @Mappings({
     @Mapping(target = "tipoRol", constant = "INVITADO"),
-    @Mapping(target = "ocupacion", source = "ocupacion"),
-    @Mapping(target = "cargo", ignore = true),
-    @Mapping(target = "carrera", ignore = true),
-    @Mapping(target = "codigoUniversidad", ignore = true),
-    @Mapping(target = "departamento", ignore = true),
-    @Mapping(target = "facultad", ignore = true),
-    @Mapping(target = "semestre", ignore = true)
     })
     RolDTO invitadoRolToDTO(InvitadoRol invitadoRol);
 
     @Mappings({
     @Mapping(target = "tipoRol", constant = "FUNCIONARIO"),
-    @Mapping(target = "codigoUniversidad", source = "codigoUniversidad"),
-    @Mapping(target = "cargo", source = "cargo"),
-    @Mapping(target = "departamento", source = "departamento"),
+    @Mapping(target = "dependencia", source = "dependencia")
     })
     RolDTO funcionarioRolToDTO(FuncionarioRol funcionarioRol);
 

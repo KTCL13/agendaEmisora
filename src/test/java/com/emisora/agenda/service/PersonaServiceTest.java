@@ -70,13 +70,13 @@ class PersonaServiceTest {
 
         RolDTO rolEstudianteDTO = new RolDTO();
         rolEstudianteDTO.setTipoRol("ESTUDIANTE");
-        rolEstudianteDTO.setCodigoUniversidad("E001");
+        rolEstudianteDTO.setCodigoEstudiante("E001");
         rolEstudianteDTO.setCarrera("INGENIERIA_DE_SISTEMAS");
 
         RolDTO rolProfesorDTO = new RolDTO();
         rolProfesorDTO.setTipoRol("PROFESOR");
-        rolProfesorDTO.setDepartamento("Ingeniería");
         rolProfesorDTO.setCarrera("INGENIERIA_ELECTRONICA");
+        rolProfesorDTO.setFacultad("Ingeniería");
 
         personaRequestDTO.setRoles(Arrays.asList(rolEstudianteDTO, rolProfesorDTO));
 
@@ -84,15 +84,14 @@ class PersonaServiceTest {
         personaMappedFromRequest = new Persona(); 
 
         estudianteRolEntity = new EstudianteRol();
-        estudianteRolEntity.setCodigoUniversidad("E001");
+        estudianteRolEntity.setCodigoEstudiante("E001");
         estudianteRolEntity.setCarrera(CarreraEnum.INGENIERIA_SISTEMAS);
-        estudianteRolEntity.setSemestre(2);
+
 
 
         profesorRolEntity = new ProfesorRol();
         profesorRolEntity.setCarrera(CarreraEnum.INGENIERIA_SISTEMAS);
         profesorRolEntity.setFacultad("Ingeniería");
-        profesorRolEntity.setCodigoUniversidad("202112344");
     
 
         // 3. Entidad Persona Guardada (simulando lo que retornaría el repositorio)
@@ -242,11 +241,9 @@ class PersonaServiceTest {
         assertEquals(2, personaPasadaASave.getRoles().size());
 
         // Verificar que los roles correctos fueron añadidos a la Persona
-        assertTrue(personaPasadaASave.getRoles().stream().anyMatch(r -> r instanceof EstudianteRol && ((EstudianteRol)r).getCodigoUniversidad().equals("E001")));
+        assertTrue(personaPasadaASave.getRoles().stream().anyMatch(r -> r instanceof EstudianteRol && ((EstudianteRol)r).getCodigoEstudiante().equals("E001")));
         assertTrue(personaPasadaASave.getRoles().stream().anyMatch(r -> r instanceof EstudianteRol && ((EstudianteRol)r).getCarrera().equals(CarreraEnum.INGENIERIA_SISTEMAS)));
-        assertTrue(personaPasadaASave.getRoles().stream().anyMatch(r -> r instanceof EstudianteRol && ((EstudianteRol)r).getSemestre() == 2));
 
-        assertTrue(personaPasadaASave.getRoles().stream().anyMatch(r -> r instanceof ProfesorRol && ((ProfesorRol)r).getCodigoUniversidad().equals("202112344")));
         assertTrue(personaPasadaASave.getRoles().stream().anyMatch(r -> r instanceof ProfesorRol && ((ProfesorRol)r).getCarrera().equals(CarreraEnum.INGENIERIA_SISTEMAS)));
         assertTrue(personaPasadaASave.getRoles().stream().anyMatch(r -> r instanceof ProfesorRol && ((ProfesorRol)r).getFacultad().equals("Ingeniería")));
   

@@ -148,4 +148,11 @@ public class PersonaService {
         }
     }
 
+
+    public PersonaDTO obtenerPersonaPorId(Long id) {
+        Persona persona = personaRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada con id: " + id));
+        return personaMapper.toDto(persona);
+    }
+
 }

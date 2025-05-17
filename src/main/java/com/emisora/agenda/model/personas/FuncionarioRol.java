@@ -12,8 +12,6 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("FUNCIONARIO")
 public class FuncionarioRol extends Rol {
 
-    private String departamento;
-    private String cargo;
-    private String codigoUniversidad;
+    private String dependencia;
 
 }

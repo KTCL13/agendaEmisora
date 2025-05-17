@@ -10,7 +10,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -29,7 +28,13 @@ public class PersonaController {
         return new ResponseEntity<>(personaCreada, HttpStatus.CREATED);
     }
 
-    @GetMapping("/allpersonas")
+    @GetMapping("/{id}")
+    public ResponseEntity<PersonaDTO> obtenerPersonaPorId(@PathVariable Long id) {
+        PersonaDTO persona = personaService.obtenerPersonaPorId(id);
+        return new ResponseEntity<>(persona, HttpStatus.OK);
+    }
+
+    @GetMapping("/allPersonas")
     public ResponseEntity<List<PersonaDTO>> obtenerTodasLasPersonas() {
         List<PersonaDTO> personas = personaService.obtenerTodasLasPersonas();
         return new ResponseEntity<>(personas, HttpStatus.OK);

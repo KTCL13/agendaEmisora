@@ -13,12 +13,8 @@ public class RolDTO {
 
     
     private String carrera;
-    private int semestre;
-
-    private String departamento;
-    private String cargo;
-    private String codigoUniversidad;
-
+    private String dependencia;
+    private String codigoEstudiante;
     private String ocupacion;
     private String facultad;
 

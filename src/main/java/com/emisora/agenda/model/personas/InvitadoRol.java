@@ -13,6 +13,5 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("INVITADO")
 public class InvitadoRol extends Rol {
 
-    private String ocupacion;
-
+    
 }
