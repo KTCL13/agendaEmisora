@@ -1,6 +1,7 @@
 package com.emisora.agenda.controller;
 
 import com.emisora.agenda.dto.CancionDTO;
+import com.emisora.agenda.dto.OperationResponseDTO;
 import com.emisora.agenda.exceptions.ResourceNotFoundException;
 import com.emisora.agenda.mapper.CancionMapper;
 import com.emisora.agenda.model.Cancion;
@@ -54,6 +55,12 @@ public class CancionController {
         Cancion cancion = cancionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Canción no encontrada"));
         return ResponseEntity.ok(cancionMapper.toDto(cancion));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<OperationResponseDTO> eliminarCancion(@PathVariable Long id) {
+        cancionService.eliminarCancion(id);
+        return ResponseEntity.ok(new OperationResponseDTO("Canción eliminada correctamente"));
     }
 
 }
