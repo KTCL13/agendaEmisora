@@ -13,26 +13,23 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "Persona_Roles")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_rol", discriminatorType = DiscriminatorType.STRING, length = 20)
-public abstract class Rol {
+@Data
+public abstract class RolInstitucional {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rol_id")
-    private Long rolId;
+    @Column(name = "rol_institucional_id")
+    private Long rolInstitucionalId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "persona_id", nullable = false)
     private Persona persona;
-
-    public Long getRolId() { return rolId; }
-    public void setRolId(Long rolId) { this.rolId = rolId; }
-    public Persona getPersona() { return persona; }
-    public void setPersona(Persona persona) { this.persona = persona; }
 
 }

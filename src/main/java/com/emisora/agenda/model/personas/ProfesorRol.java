@@ -1,6 +1,7 @@
 package com.emisora.agenda.model.personas;
 
 import com.emisora.agenda.enums.CarreraEnum;
+import com.emisora.agenda.enums.FacultadEnum;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -15,9 +16,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @DiscriminatorValue("PROFESOR")
 @EqualsAndHashCode(callSuper = true)
-public class ProfesorRol extends Rol {
+public class ProfesorRol extends RolInstitucional {
 
-    private String facultad;
+    private FacultadEnum facultad;
     @Enumerated(EnumType.STRING) 
     private CarreraEnum carrera;
 

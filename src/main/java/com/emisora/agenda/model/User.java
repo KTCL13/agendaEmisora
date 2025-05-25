@@ -1,5 +1,9 @@
 package com.emisora.agenda.model;
 
+import java.util.List;
+
+import com.emisora.agenda.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,18 +27,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
-    private String login;
+     @Column(nullable = false, unique = true)
+    private String username;
 
-    @Column
+     @Column(nullable = false)
     private String password;
 
-    @Column
-    private String name;
+     @Column(unique = true)
+     private String email;
 
-    @Column
-    private String email;
+    private List<Role> roles;
 
-    private Role role;
-
+    private boolean active = true;
 }

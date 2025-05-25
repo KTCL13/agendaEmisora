@@ -1,6 +1,8 @@
 package com.emisora.agenda.dto;
 
-import com.emisora.agenda.model.Role;
+import java.util.List;
+
+import com.emisora.agenda.enums.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +16,9 @@ import lombok.NoArgsConstructor;
 public class UserDto {
 
     private Long id;
-    private String login;
-    private String token;
-    private String name;
+    private String username;
     private String email;
-    private Role role;
+    private List<Role> roles;
 
+    private boolean active;
 }

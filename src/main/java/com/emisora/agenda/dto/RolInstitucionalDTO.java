@@ -1,21 +1,23 @@
 package com.emisora.agenda.dto;
 
+import com.emisora.agenda.enums.CarreraEnum;
+import com.emisora.agenda.enums.FacultadEnum;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class RolDTO {
+public class RolInstitucionalDTO {
     
-    private Long rolId;
+    private Long rolInstitucionalId;
     
     @NotBlank
     private String tipoRol;
 
     
-    private String carrera;
+    private CarreraEnum carrera;
     private String dependencia;
     private String codigoEstudiante;
-    private String ocupacion;
-    private String facultad;
+    private FacultadEnum facultad;
 
 }

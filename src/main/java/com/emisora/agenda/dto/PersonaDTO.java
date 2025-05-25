@@ -1,6 +1,9 @@
 package com.emisora.agenda.dto;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import com.emisora.agenda.enums.EstadoPersona;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -34,6 +37,13 @@ public class PersonaDTO {
     private String tipoId; 
 
     @Valid
-    private List<RolDTO> roles;
+    private List<RolInstitucionalDTO> roles;
+
+
+    private EstadoPersona estado;
+
+    private LocalDate fechaCreacion;
+
+    private LocalDate fechaModificacion;
 
 }

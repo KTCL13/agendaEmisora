@@ -1,18 +1,22 @@
 package com.emisora.agenda.service;
 
 import com.emisora.agenda.dto.PersonaDTO;
-import com.emisora.agenda.dto.RolDTO;
+import com.emisora.agenda.dto.RolInstitucionalDTO;
+import com.emisora.agenda.enums.EstadoPersona;
 import com.emisora.agenda.exceptions.ResourceNotFoundException;
 import com.emisora.agenda.mapper.PersonaMapper;
-import com.emisora.agenda.mapper.RolMapper;
+import com.emisora.agenda.mapper.RolInstitucionalMapper;
 import com.emisora.agenda.model.personas.Persona;
-import com.emisora.agenda.model.personas.Rol;
+import com.emisora.agenda.model.personas.RolInstitucional;
 import com.emisora.agenda.repository.PersonaRepository;
 
 import jakarta.transaction.Transactional;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import org.springframework.stereotype.Service;
 
@@ -23,9 +27,9 @@ public class PersonaService {
     private final PersonaRepository personaRepo;
 
     private final PersonaMapper personaMapper;
-    private final RolMapper rolMapper;
+    private final RolInstitucionalMapper rolMapper;
 
-    public PersonaService(PersonaRepository personaRepo, PersonaMapper personaMapper, RolMapper rolMapper) {
+    public PersonaService(PersonaRepository personaRepo, PersonaMapper personaMapper, RolInstitucionalMapper rolMapper) {
         this.personaRepo = personaRepo;
         this.personaMapper = personaMapper;
         this.rolMapper = rolMapper;
@@ -36,13 +40,15 @@ public class PersonaService {
     public PersonaDTO crearPersonaConRoles(PersonaDTO requestDTO) {
         
         Persona persona = personaMapper.dtoToPersona(requestDTO);
+        persona.setFechaCreacion(LocalDateTime.now());
+        persona.setEstado(com.emisora.agenda.enums.EstadoPersona.ACTIVO);
         
         if (persona.getRoles() == null) {
             persona.setRoles(new ArrayList<>());
         }
         if (requestDTO.getRoles() != null) {
-            for (RolDTO rolDto : requestDTO.getRoles()) {
-                Rol rolEntity = null;
+            for (RolInstitucionalDTO rolDto : requestDTO.getRoles()) {
+                RolInstitucional rolEntity = null;
 
                 switch (rolDto.getTipoRol().toUpperCase()) {
                     case "ESTUDIANTE":
@@ -73,7 +79,7 @@ public class PersonaService {
 
 
     public List<PersonaDTO> obtenerTodasLasPersonas() {
-        List<Persona> personas = personaRepo.findAll();
+        List<Persona> personas = personaRepo.findByEstado(EstadoPersona.ACTIVO);
         return personaMapper.toDtoList(personas);
     }
 
@@ -89,6 +95,7 @@ public class PersonaService {
         personaExistente.setTelefono(personaDTO.getTelefono());
         personaExistente.setCorreo(personaDTO.getCorreo());
         personaExistente.setNumeroId(personaDTO.getNumeroId());
+        personaExistente.setFechaModificacion(LocalDateTime.now());
         if (personaDTO.getTipoId() != null) {
             try {
 
@@ -101,15 +108,15 @@ public class PersonaService {
             personaExistente.setRoles(new ArrayList<>());
         }
       
-        List<Rol> rolesAntiguos = new ArrayList<>(personaExistente.getRoles());
-        for(Rol rolAntiguo : rolesAntiguos){
+        List<RolInstitucional> rolesAntiguos = new ArrayList<>(personaExistente.getRoles());
+        for(RolInstitucional rolAntiguo : rolesAntiguos){
             personaExistente.removeRol(rolAntiguo); 
         }
 
         if (personaDTO.getRoles() != null) {
-            for (RolDTO rolDto : personaDTO.getRoles()) {
+            for (RolInstitucionalDTO rolDto : personaDTO.getRoles()) {
      
-                Rol nuevoRolEntity = convertirRolDtoAEntidad(rolDto);
+                RolInstitucional nuevoRolEntity = convertirRolDtoAEntidad(rolDto);
                 if (nuevoRolEntity != null) {
                     personaExistente.addRol(nuevoRolEntity);
                 }
@@ -126,10 +133,11 @@ public class PersonaService {
     public void eliminarPersona(Long id) {
         Persona personaExistente = personaRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada con id: " + id));
-        personaRepo.delete(personaExistente);
+        personaExistente.setEstado(com.emisora.agenda.enums.EstadoPersona.INACTIVO);
+        personaRepo.save(personaExistente);
     }
 
-    private Rol convertirRolDtoAEntidad(RolDTO rolDto) {
+    private RolInstitucional convertirRolDtoAEntidad(RolInstitucionalDTO rolDto) {
         if (rolDto == null || rolDto.getTipoRol() == null) {
             return null;
         }
