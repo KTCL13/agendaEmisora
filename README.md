@@ -35,7 +35,7 @@ Editar
 ### 🛢️ Base de Datos PostgreSQL
 Requiere PostgreSQL versión 13, 14, 15 o 16 instalada y en ejecución
 
-La instalación y configuración es un paso previo obligatorio. Consulta la sección de instalación para más detalles.
+La instalación y configuración es un paso previo obligatorio. Consulta la sección de instalación de Confluence para más detalles.
 
 ### 🌐 Navegador Web
 Google Chrome, Mozilla Firefox, Microsoft Edge, o Safari (macOS)
