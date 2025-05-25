@@ -49,6 +49,13 @@ public class CancionService {
         return cancionMapper.toDto(actualizada);
     }
 
+    public void eliminarCancion(Long id) {
+        if (!cancionRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Canción no encontrada con ID: " + id);
+        }
+        cancionRepository.deleteById(id);
+    }
+
 
     private void validarCancion(CancionDTO cancionDTO) {
         if (cancionRepository.findByTituloAndArtista(cancionDTO.getTitulo(), cancionDTO.getArtista()).isPresent()) {
