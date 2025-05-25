@@ -11,7 +11,6 @@ public class RolDTO {
     @NotBlank
     private String tipoRol;
 
-    
     private String carrera;
     private String dependencia;
     private String codigoEstudiante;
