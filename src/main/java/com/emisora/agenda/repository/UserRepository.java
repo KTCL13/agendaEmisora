@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import com.emisora.agenda.enums.EstadoPersona;
 import com.emisora.agenda.model.User;
 
 
@@ -20,11 +20,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
 
     
-    @Query("SELECT u FROM users u WHERE" +
+    @Query("SELECT u FROM User u WHERE" +
     " (LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-     "  LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-    "  LOWER(u.id) LIKE LOWER(CONCAT('%', :searchTerm, '%')))")
-    Page<User> findByTerminoBusqueda(String searchTerm, Pageable pageable);
-
-    Page<User> findAll(EstadoPersona estado, Pageable pageable);
+    "  LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%')) )")
+    Page<User> findByTerminoBusqueda(@Param("searchTerm") String searchTerm, Pageable pageable);
+    
+    Page<User> findAll(Pageable pageable);
 }

@@ -1,7 +1,10 @@
 package com.emisora.agenda.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import org.springframework.stereotype.Service;
 
@@ -22,11 +25,17 @@ public class ProgramaService {
         this.programaMapper = programaMapper;
     }
 
-    public List<ProgramaDTO> getAllProgramas() {
-        List<Programa> programas = programaRepository.findAll();
+    public Page<ProgramaDTO> getAllProgramas(int page, int size, String ordenarPor, String direccionOrden, String searchTerm ) {
         
-        return programas.stream()
-                .map(programaMapper::toDto).collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direccionOrden), ordenarPor));
+        Page<Programa> programasPage;
+
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            programasPage = programaRepository.findByTerminoBusqueda(searchTerm, pageable);
+        } else {
+            programasPage = programaRepository.findAll(pageable);
+        }
+        return programasPage.map(programaMapper::toDto);
     }
 
     public ProgramaDTO savePrograma(ProgramaDTO programaDTO) {
@@ -34,8 +43,25 @@ public class ProgramaService {
         return programaMapper.toDto(programa);
     }
 
+    public ProgramaDTO updatePrograma(Long id, ProgramaDTO programaDTO) {
+        if (!programaRepository.existsById(id)) {
+            return null; 
+        }
+        programaDTO.setId(id);
+        Programa programa = programaMapper.toEntity(programaDTO);
+        programa = programaRepository.save(programa);
+        return programaMapper.toDto(programa);
+    }
+
+
     public void deletePrograma(Long id) {
         programaRepository.deleteById(id);
+    }
+
+    public ProgramaDTO getProgramaById(Long id) {
+        return programaRepository.findById(id)
+                .map(programaMapper::toDto)
+                .orElse(null);
     }
 
     

@@ -1,5 +1,6 @@
 package com.emisora.agenda.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -17,8 +18,6 @@ public class ProgramaDTO {
     private String categoria;
     private String titulo;
     private String descripcion;
-    private String fechaCreacion;
-
-    private List<EpisodioDTO> episodios;
+    private LocalDate fechaCreacion;
 
 }

@@ -22,6 +22,6 @@ public interface PersonaRepository extends JpaRepository<Persona, Long> {
     " (LOWER(p.nombresPersona) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
      "  LOWER(p.apellidosPersona) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
     "  LOWER(p.numeroId) LIKE LOWER(CONCAT('%', :searchTerm, '%')))")
-    Page<Persona> findByEstadoAndTerminoBusqueda(EstadoPersona estadoPersona, @Param("searchTerm") String searchTerm, Pageable pageable);
+    Page<Persona> findByEstadoAndTerminoBusqueda( EstadoPersona estadoPersona, @Param("searchTerm") String searchTerm, Pageable pageable);
     
 }

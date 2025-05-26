@@ -16,11 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emisora.agenda.dto.SignUpDto;
 import com.emisora.agenda.dto.UserDto;
-import com.emisora.agenda.enums.EstadoPersona;
 import com.emisora.agenda.exceptions.AppException;
 import com.emisora.agenda.mapper.UserMapper;
 import com.emisora.agenda.model.User;
-import com.emisora.agenda.model.personas.Persona;
 import com.emisora.agenda.repository.UserRepository;
 
 
@@ -33,7 +31,7 @@ public class UserService implements UserDetailsService {
     
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-     private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -100,7 +98,7 @@ public class UserService implements UserDetailsService {
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
             usersPage = userRepository.findByTerminoBusqueda(searchTerm, pageable);
         } else {
-            usersPage = userRepository.findAll(EstadoPersona.ACTIVO, pageable); 
+            usersPage = userRepository.findAll(pageable); 
         }
          return usersPage.map(userMapper::toUserDto);
 
