@@ -14,7 +14,6 @@ import com.emisora.agenda.repository.EpisodioRepository;
 import com.emisora.agenda.repository.PersonaRepository;
 import com.emisora.agenda.repository.ProgramaRepository;
 
-import jakarta.validation.Valid;
 
 
 import jakarta.persistence.EntityNotFoundException;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.List;
+
 import java.util.stream.Collectors;
 
 @Service

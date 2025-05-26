@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,29 @@ public class PersonaController {
 
     @Autowired
     private PersonaService personaService;
+
+
+    
+
+    @GetMapping
+    public ResponseEntity<Page<PersonaDTO>> obtenerPersonasPorEstado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "nombresPersona,asc") String[] sort,
+            @RequestParam(required = false) String search) {
+
+            String ordenarPor = sort[0];
+            String direccionOrden = (sort.length > 1 && sort[1].equalsIgnoreCase("desc")) ? "desc" : "asc";
+
+         Page<PersonaDTO> personas = personaService.getAllActivePersons(
+                page,
+                size,
+                ordenarPor,
+                direccionOrden,
+                search 
+        );
+        return new ResponseEntity<>(personas, HttpStatus.OK);
+    }
 
     @PostMapping ("/crearPersona")
      public ResponseEntity<PersonaDTO> crearPersona(
@@ -39,6 +63,9 @@ public class PersonaController {
         List<PersonaDTO> personas = personaService.obtenerTodasLasPersonas();
         return new ResponseEntity<>(personas, HttpStatus.OK);
     }
+
+
+
 
     @PutMapping("/actualizarPersona/{id}")
     public ResponseEntity<PersonaDTO> actualizarPersona(

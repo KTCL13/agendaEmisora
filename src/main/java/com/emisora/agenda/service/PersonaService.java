@@ -17,7 +17,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -161,6 +164,20 @@ public class PersonaService {
         Persona persona = personaRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada con id: " + id));
         return personaMapper.toDto(persona);
+    }
+
+
+    public Page<PersonaDTO> getAllActivePersons(int page, int size, String ordenarPor, String direccionOrden, String searchTerm) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direccionOrden), ordenarPor));
+        Page<Persona> personasPage;
+
+    if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+        personasPage = personaRepo.findByEstadoAndTerminoBusqueda(EstadoPersona.ACTIVO, searchTerm, pageable);
+    } else {
+        personasPage = personaRepo.findByEstado(EstadoPersona.ACTIVO, pageable); 
+    }
+        return personasPage.map(personaMapper::toDto);
     }
 
 }
