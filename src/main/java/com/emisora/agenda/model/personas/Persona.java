@@ -20,30 +20,30 @@ public class Persona {
     @Id
     @Column(name = "persona_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idPersona;
 
-    private String nombres;
-    private String apellidos;
-    private String telefono;
+    private String nombresPersona;
+    private String apellidosPersona;
+    private String telefonoPersona;
     @Enumerated(EnumType.STRING)
     private TipoId tipoId;
     private String correo;
     private String numeroId;
     private EstadoPersona estado;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaModificacion;
+    private LocalDateTime fechaCreacionPersona;
+    private LocalDateTime fechaModificacionPersona;
 
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<RolInstitucional> roles = new ArrayList<>();
+    private List<RolInstitucional> rolesInstitucionales = new ArrayList<>();
     
 
     public void addRol(RolInstitucional rol) {
-        this.roles.add(rol);
+        this.rolesInstitucionales.add(rol);
         rol.setPersona(this);
     }
 
     public void removeRol(RolInstitucional rol) {
-        this.roles.remove(rol);
+        this.rolesInstitucionales.remove(rol);
         rol.setPersona(null);
     }
 

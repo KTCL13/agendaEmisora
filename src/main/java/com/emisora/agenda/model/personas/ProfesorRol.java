@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-@DiscriminatorValue("PROFESOR")
+@DiscriminatorValue("DOCENTE")
 @EqualsAndHashCode(callSuper = true)
 public class ProfesorRol extends RolInstitucional {
 

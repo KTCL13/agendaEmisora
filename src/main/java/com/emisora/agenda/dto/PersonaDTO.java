@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PersonaDTO {  
 
-    private Long id;
+    private Long idPersona;
 
     @NotBlank
-    private String nombres;
+    private String nombresPersona;
 
     @NotBlank
-    private String apellidos;
+    private String apellidosPersona;
 
     @NotBlank
-    private String telefono;
+    private String telefonoPersona;
 
     @NotBlank
     private String correo;
@@ -37,13 +37,13 @@ public class PersonaDTO {
     private String tipoId; 
 
     @Valid
-    private List<RolInstitucionalDTO> roles;
+    private List<RolInstitucionalDTO> rolesInstitucionales;
 
 
     private EstadoPersona estado;
 
-    private LocalDate fechaCreacion;
+    private LocalDate fechaCreacionPersona;
 
-    private LocalDate fechaModificacion;
+    private LocalDate fechaModificacionPersona;
 
 }

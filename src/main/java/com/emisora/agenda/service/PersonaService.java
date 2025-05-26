@@ -40,21 +40,21 @@ public class PersonaService {
     public PersonaDTO crearPersonaConRoles(PersonaDTO requestDTO) {
         
         Persona persona = personaMapper.dtoToPersona(requestDTO);
-        persona.setFechaCreacion(LocalDateTime.now());
+        persona.setFechaCreacionPersona(LocalDateTime.now());
         persona.setEstado(com.emisora.agenda.enums.EstadoPersona.ACTIVO);
         
-        if (persona.getRoles() == null) {
-            persona.setRoles(new ArrayList<>());
+        if (persona.getRolesInstitucionales() == null) {
+            persona.setRolesInstitucionales(new ArrayList<>());
         }
-        if (requestDTO.getRoles() != null) {
-            for (RolInstitucionalDTO rolDto : requestDTO.getRoles()) {
+        if (requestDTO.getRolesInstitucionales() != null) {
+            for (RolInstitucionalDTO rolDto : requestDTO.getRolesInstitucionales()) {
                 RolInstitucional rolEntity = null;
 
                 switch (rolDto.getTipoRol().toUpperCase()) {
                     case "ESTUDIANTE":
                         rolEntity = rolMapper.dtoToEstudianteRol(rolDto);
                         break;
-                    case "PROFESOR":
+                    case "DOCENTE":
                         rolEntity = rolMapper.dtoToProfesorRol(rolDto);
                         break;
                     case "INVITADO":
@@ -90,12 +90,12 @@ public class PersonaService {
         Persona personaExistente = personaRepo.findById(personaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada con id: " + personaId));
 
-        personaExistente.setNombres(personaDTO.getNombres());
-        personaExistente.setApellidos(personaDTO.getApellidos());
-        personaExistente.setTelefono(personaDTO.getTelefono());
+        personaExistente.setNombresPersona(personaDTO.getNombresPersona());
+        personaExistente.setApellidosPersona(personaDTO.getApellidosPersona());
+        personaExistente.setTelefonoPersona(personaDTO.getTelefonoPersona());
         personaExistente.setCorreo(personaDTO.getCorreo());
         personaExistente.setNumeroId(personaDTO.getNumeroId());
-        personaExistente.setFechaModificacion(LocalDateTime.now());
+        personaExistente.setFechaModificacionPersona(LocalDateTime.now());
         if (personaDTO.getTipoId() != null) {
             try {
 
@@ -104,17 +104,17 @@ public class PersonaService {
                 System.err.println("TipoId inválido proporcionado: " + personaDTO.getTipoId());
             }
         }
-        if (personaExistente.getRoles() == null) {
-            personaExistente.setRoles(new ArrayList<>());
+        if (personaExistente.getRolesInstitucionales() == null) {
+            personaExistente.setRolesInstitucionales(new ArrayList<>());
         }
       
-        List<RolInstitucional> rolesAntiguos = new ArrayList<>(personaExistente.getRoles());
+        List<RolInstitucional> rolesAntiguos = new ArrayList<>(personaExistente.getRolesInstitucionales());
         for(RolInstitucional rolAntiguo : rolesAntiguos){
             personaExistente.removeRol(rolAntiguo); 
         }
 
-        if (personaDTO.getRoles() != null) {
-            for (RolInstitucionalDTO rolDto : personaDTO.getRoles()) {
+        if (personaDTO.getRolesInstitucionales() != null) {
+            for (RolInstitucionalDTO rolDto : personaDTO.getRolesInstitucionales()) {
      
                 RolInstitucional nuevoRolEntity = convertirRolDtoAEntidad(rolDto);
                 if (nuevoRolEntity != null) {
@@ -144,7 +144,7 @@ public class PersonaService {
         switch (rolDto.getTipoRol().toUpperCase()) {
             case "ESTUDIANTE":
                 return rolMapper.dtoToEstudianteRol(rolDto);
-            case "PROFESOR":
+            case "DOCENTE":
                 return rolMapper.dtoToProfesorRol(rolDto);
             case "INVITADO":
                 return rolMapper.dtoToInvitadoRol(rolDto);

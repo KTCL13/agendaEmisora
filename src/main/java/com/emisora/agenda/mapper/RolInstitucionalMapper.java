@@ -83,7 +83,7 @@ public interface RolInstitucionalMapper {
     RolInstitucionalDTO estudianteRolToDTO(EstudianteRol estudianteRol);
 
     @Mappings({
-    @Mapping(target = "tipoRol", constant = "PROFESOR"),
+    @Mapping(target = "tipoRol", constant = "DOCENTE"),
     @Mapping(source = "carrera", target = "carrera"), 
     @Mapping(target = "facultad", source = "facultad"),
     })

@@ -17,8 +17,8 @@ public interface PersonaMapper {
     PersonaDTO toDto(Persona persona);
 
     @Mappings({
-        @Mapping(target = "id", ignore = true),
-        @Mapping(target = "roles", ignore = true),
+        @Mapping(target = "idPersona", ignore = true),
+        @Mapping(target = "rolesInstitucionales", ignore = true),
     })
     Persona dtoToPersona(PersonaDTO dto);
 
