@@ -2,6 +2,10 @@ package com.emisora.agenda.service;
 
 import java.util.ArrayList;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,10 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.emisora.agenda.dto.SignUpDto;
 import com.emisora.agenda.dto.UserDto;
-
+import com.emisora.agenda.enums.EstadoPersona;
 import com.emisora.agenda.exceptions.AppException;
 import com.emisora.agenda.mapper.UserMapper;
 import com.emisora.agenda.model.User;
+import com.emisora.agenda.model.personas.Persona;
 import com.emisora.agenda.repository.UserRepository;
 
 
@@ -85,6 +90,20 @@ public class UserService implements UserDetailsService {
 
 
         return userMapper.toUserDto(savedUser);
+    }
+
+    public Page<UserDto> getAllUsers(int page, int size, String ordenarPor, String direccionOrden, String searchTerm) {
+          
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direccionOrden), ordenarPor));
+        Page<User> usersPage;
+
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            usersPage = userRepository.findByTerminoBusqueda(searchTerm, pageable);
+        } else {
+            usersPage = userRepository.findAll(EstadoPersona.ACTIVO, pageable); 
+        }
+         return usersPage.map(userMapper::toUserDto);
+
     }
 
     
