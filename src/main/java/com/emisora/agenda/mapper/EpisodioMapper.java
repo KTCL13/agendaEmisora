@@ -1,27 +1,48 @@
 package com.emisora.agenda.mapper;
 
-import java.util.List;
+
+import java.util.Set;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.Mapping;
+
 
 import com.emisora.agenda.dto.EpisodioDTO;
+import com.emisora.agenda.dto.EpisodioResponseDTO;
+import com.emisora.agenda.model.Cancion;
 import com.emisora.agenda.model.Episodio;
+import com.emisora.agenda.model.personas.Persona;
 
 @Mapper(componentModel = "spring")
 public interface EpisodioMapper {
 
-    EpisodioDTO toDTO(Episodio episodio);
 
-    List<EpisodioDTO> toDTOList(List<Episodio> episodios);
+    @Mapping(source = "productor.idPersona", target = "productorId")
+    @Mapping(source = "locutor.idPersona", target = "locutorId")
+    @Mapping(source = "programa.id", target = "programaId")
+    @Mapping(target = "invitadosIds", expression = "java(mapPersonasToIds(episodio.getInvitados()))")
+    @Mapping(target = "cancionIds", expression = "java(mapCancionesToIds(episodio.getCanciones()))")
+    EpisodioDTO episodioToEpisodioDTO(Episodio episodio);
 
-    Episodio toEntity(EpisodioDTO episodioDTO);
+    EpisodioResponseDTO episodioToEpisodioResponseDTO(Episodio episodio);
 
-    /**
-     * Actualiza una entidad Episodio existente a partir de un EpisodioDTO.
-     *
-     * @param episodioDTO El DTO con los datos actualizados.
-     * @param episodio    La entidad a actualizar.
-     */
-    void updateEntityFromDTO(EpisodioDTO episodioDTO, @MappingTarget Episodio episodio);
+
+    @Mapping(target = "productor", ignore = true) 
+    @Mapping(target = "locutor", ignore = true)
+    @Mapping(target = "programa", ignore = true)
+    @Mapping(target = "invitados", ignore = true)
+    @Mapping(target = "canciones", ignore = true)
+    Episodio episodioDTOToEpisodio(EpisodioDTO episodioDTO);
+
+    default Set<Long> mapPersonasToIds(Set<Persona> personas) {
+        if (personas == null) return null;
+        return personas.stream().map(Persona::getIdPersona).collect(java.util.stream.Collectors.toSet());
+    }
+
+    default Set<Long> mapCancionesToIds(Set<Cancion> canciones) {
+        // Asumiendo que Cancion tiene un método getId()
+        if (canciones == null) return null;
+        return canciones.stream().map(Cancion::getId).collect(java.util.stream.Collectors.toSet());
+    }
+
 }

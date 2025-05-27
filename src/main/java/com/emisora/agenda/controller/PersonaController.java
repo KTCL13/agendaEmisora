@@ -31,7 +31,8 @@ public class PersonaController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "nombresPersona,asc") String[] sort,
             @RequestParam(required = false) String search) {
-
+            System.out.println("Obteniendo personas con los siguientes parámetros: "
+                    + "page=" + page + ", size=" + size + ", sort=" + String.join(",", sort) + ", search=" + search);
             String ordenarPor = sort[0];
             String direccionOrden = (sort.length > 1 && sort[1].equalsIgnoreCase("desc")) ? "desc" : "asc";
 

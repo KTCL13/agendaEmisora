@@ -33,22 +33,16 @@ public class EpisodioDTO {
 
     @NotNull(message = "El ID del productor es obligatorio.")
     private Long productorId;
-    private String productorNombre; // Opcional, para mostrar en respuestas
+
 
     @NotNull(message = "El ID del locutor es obligatorio.")
     private Long locutorId;
-    private String locutorNombre; // Opcional
 
-    @NotNull(message = "El ID del programa es obligatorio.")
+
     private Long programaId;
-    private String programaNombre; // Opcional
 
     private Set<Long> invitadosIds;
     private Set<Long> cancionIds;
     private Set<Long> referenciaIds;
 
-    
-    private Set<String> nombresInvitados;
-    private Set<String> titulosCanciones;
-    private Set<String> descripcionesReferencias;
 }

@@ -1,9 +1,9 @@
 package com.emisora.agenda.service;
 
-import java.util.List;
 import java.util.Set;
 
 import com.emisora.agenda.dto.EpisodioDTO;
+import com.emisora.agenda.dto.EpisodioResponseDTO;
 import com.emisora.agenda.mapper.EpisodioMapper;
 import com.emisora.agenda.model.Cancion;
 import com.emisora.agenda.model.Episodio;
@@ -18,15 +18,20 @@ import com.emisora.agenda.repository.ProgramaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.checkerframework.checker.units.qual.s;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 
-import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor // Inyección de dependencias por constructor de Lombok
+@RequiredArgsConstructor
 public class EpisodioService {
 
     private final EpisodioRepository episodioRepository;
@@ -37,27 +42,45 @@ public class EpisodioService {
   
 
     @Transactional
-    public EpisodioDTO crearEpisodio(EpisodioDTO episodioDTO) {
-        Episodio episodio = episodioMapper.toEntity(episodioDTO);
+    public EpisodioResponseDTO crearEpisodio( Long programaId,EpisodioDTO episodioDTO) { 
+        System.out.println("Creando episodio para el programa con ID: " + programaId);
+        Episodio episodio = episodioMapper.episodioDTOToEpisodio(episodioDTO);
+        episodio.setPrograma(programaRepository.findById(programaId)
+                .orElseThrow(() -> new EntityNotFoundException("Programa no encontrado con id: " + programaId)));
+        episodio.setProductor(personaRepository.findById(episodioDTO.getProductorId())
+                .orElseThrow(() -> new EntityNotFoundException("Productor no encontrado con id: " + episodioDTO.getProductorId())));
+        episodio.setLocutor(personaRepository.findById(episodioDTO .getLocutorId())
+                .orElseThrow(() -> new EntityNotFoundException("Locutor no encontrado con id: " + episodioDTO.getLocutorId())));
+
+        if (episodioDTO.getInvitadosIds() != null) {
+            Set<Persona> invitados = new HashSet<>(personaRepository.findAllById(episodioDTO.getInvitadosIds()));
+            episodio.setInvitados(invitados);
+        } else {
+            episodio.setInvitados(new HashSet<>());
+        }
+
+        if (episodioDTO.getCancionIds() != null) {
+            Set<Cancion> canciones = new HashSet<>(cancionRepository.findAllById(episodioDTO.getCancionIds()));
+            episodio.setCanciones(canciones);
+        } else {
+            episodio.setCanciones(new HashSet<>());
+            
+        }
+
         Episodio episodioGuardado = episodioRepository.save(episodio);
-        return episodioMapper.toDTO(episodioGuardado);
+        return episodioMapper.episodioToEpisodioResponseDTO(episodioGuardado);
     }
 
 
     @Transactional(readOnly = true)
-    public EpisodioDTO obtenerEpisodioPorId(Long id) {
+    public EpisodioResponseDTO obtenerEpisodioPorId(Long id) {
         Episodio episodio = episodioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Episodio no encontrado con id: " + id));
-        return episodioMapper.toDTO(episodio);
+        return episodioMapper.episodioToEpisodioResponseDTO(episodio);
     }
 
  
-    @Transactional(readOnly = true)
-    public List<EpisodioDTO> obtenerTodosLosEpisodios() {
-        return episodioRepository.findAll().stream()
-                .map(episodioMapper::toDTO)
-                .collect(Collectors.toList());
-    }
+
 
 
     @Transactional
@@ -100,7 +123,7 @@ public class EpisodioService {
         }
 
         Episodio episodioActualizado = episodioRepository.save(episodioExistente);
-        return (episodioMapper.toDTO(episodioActualizado));
+        return (episodioMapper.episodioToEpisodioDTO(episodioActualizado));
     }
 
     @Transactional
@@ -109,6 +132,20 @@ public class EpisodioService {
             throw new EntityNotFoundException("Episodio no encontrado con id: " + id);
         }
         episodioRepository.deleteById(id);
+    }
+
+
+    public Page<EpisodioResponseDTO> obtenerEpisodiosPorPrograma(Long programaId, int page, int size, String ordenarPor,
+            String direccionOrden) {
+        System.out.println("Obteniendo episodios para el programa con ID: " + programaId);
+        Pageable pageable= PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direccionOrden), ordenarPor));
+        Page<Episodio> episodiosPage;
+
+        episodiosPage = episodioRepository.findByProgramaId(programaId, pageable);
+
+        System.out.println("Episodios obtenidos: " + episodiosPage.getContent().size());
+
+        return episodiosPage.map(episodioMapper::episodioToEpisodioResponseDTO);
     }
 
 
