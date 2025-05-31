@@ -26,10 +26,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-// DTO para la petición de login (puedes moverlo a su propio archivo)
+// DTO para la petición de login
 record AuthenticationRequest(String usernameOrEmail, String password) {}
 
-// DTO para la respuesta de login (puedes moverlo a su propio archivo)
+// DTO para la respuesta de login
 record AuthenticationResponse(String jwt, String username, List<String> roles) {}
 
 @RestController
@@ -61,7 +61,7 @@ public class AuthController {
                     )
             );
             // Si la autenticación es exitosa, 'authentication.isAuthenticated()' será true.
-            // El principal en 'authentication' será el UserDetails cargado por tu CustomUserDetailsService.
+            // El principal en 'authentication' será el UserDetails cargado por CustomUserDetailsService.
             log.info("Usuario autenticado exitosamente: {}", authentication.getName());
 
         } catch (BadCredentialsException e) {
