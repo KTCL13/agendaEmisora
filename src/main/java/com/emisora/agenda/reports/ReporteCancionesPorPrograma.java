@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ReporteCancionesPorProgramaStrategy implements EstrategiaDeReporte<CancionReporteDto> {
+public class ReporteCancionesPorPrograma implements EstrategiaDeReporte<CancionReporteDto> {
 
     @Override
     public List<CancionReporteDto> generar(Map<String, Object> parametros) {

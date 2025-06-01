@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class EpisodioPorPersonaExcelExporter {
+public class ExcelExporterEpisodioPorPersona {
 
     public byte[] generarExcel(List<EpisodioReporteDto> episodios) throws IOException {
         Workbook workbook = new XSSFWorkbook();

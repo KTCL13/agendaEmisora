@@ -5,10 +5,9 @@ import com.emisora.agenda.dto.EpisodioReporteDto;
 import com.emisora.agenda.exceptions.ResourceNotFoundException;
 import com.emisora.agenda.model.Programa;
 import com.emisora.agenda.model.personas.Persona;
-import com.emisora.agenda.reports.EpisodioPorPersonaExcelExporter;
-import com.emisora.agenda.reports.CancionPorProgramaExcelExporter;
-import com.emisora.agenda.reports.ReporteEpisodiosPorPersonaStrategy;
-import com.emisora.agenda.repository.CancionRepository;
+import com.emisora.agenda.reports.ExcelExporterEpisodioPorPersona;
+import com.emisora.agenda.reports.ExcelExporterCancionPorPrograma;
+import com.emisora.agenda.reports.ReporteEpisodiosPorPersona;
 import com.emisora.agenda.repository.PersonaRepository;
 import com.emisora.agenda.repository.ProgramaRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +23,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReportService {
 
-    private final CancionRepository cancionRepository;
     private final ProgramaRepository programaRepository;
     private final PersonaRepository personaRepository;
-    private final CancionPorProgramaExcelExporter excelExporter;
-    private final EpisodioPorPersonaExcelExporter episodioExporter;
+    private final ExcelExporterCancionPorPrograma cancionExporter;
+    private final ExcelExporterEpisodioPorPersona episodioExporter;
+    @Autowired
+    private ReporteEpisodiosPorPersona reporteEpisodiosPorPersona;
 
     public byte[] generarReporteCancionesPorProgramaExcel(Long programaId) {
         Programa programa = programaRepository.findById(programaId)
@@ -41,7 +41,7 @@ public class ReportService {
                 .toList();
 
         try {
-            return excelExporter.generarExcel(canciones);
+            return cancionExporter.generarExcel(canciones);
         } catch (IOException e) {
             throw new RuntimeException("Error al generar el archivo Excel", e);
         }
@@ -62,6 +62,5 @@ public class ReportService {
             throw new RuntimeException("Error al generar el archivo Excel", e);
         }
     }
-    @Autowired
-    private ReporteEpisodiosPorPersonaStrategy reporteEpisodiosPorPersona;
+
 }

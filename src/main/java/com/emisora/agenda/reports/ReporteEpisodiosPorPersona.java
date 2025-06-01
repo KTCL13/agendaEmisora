@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class ReporteEpisodiosPorPersonaStrategy implements EstrategiaDeReporte<EpisodioReporteDto> {
+public class ReporteEpisodiosPorPersona implements EstrategiaDeReporte<EpisodioReporteDto> {
 
     @Override
     public List<EpisodioReporteDto> generar(Map<String, Object> parametros) {
