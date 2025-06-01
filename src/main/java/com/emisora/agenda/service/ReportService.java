@@ -1,16 +1,24 @@
 package com.emisora.agenda.service;
 
 import com.emisora.agenda.dto.CancionReporteDto;
+import com.emisora.agenda.dto.EpisodioReporteDto;
 import com.emisora.agenda.exceptions.ResourceNotFoundException;
 import com.emisora.agenda.model.Programa;
-import com.emisora.agenda.reports.ExcelExporterCancionPorPrograma;
+import com.emisora.agenda.model.personas.Persona;
+import com.emisora.agenda.reports.EpisodioPorPersonaExcelExporter;
+import com.emisora.agenda.reports.CancionPorProgramaExcelExporter;
+import com.emisora.agenda.reports.ReporteEpisodiosPorPersonaStrategy;
 import com.emisora.agenda.repository.CancionRepository;
+import com.emisora.agenda.repository.PersonaRepository;
 import com.emisora.agenda.repository.ProgramaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +26,9 @@ public class ReportService {
 
     private final CancionRepository cancionRepository;
     private final ProgramaRepository programaRepository;
-    private final ExcelExporterCancionPorPrograma excelExporter;
+    private final PersonaRepository personaRepository;
+    private final CancionPorProgramaExcelExporter excelExporter;
+    private final EpisodioPorPersonaExcelExporter episodioExporter;
 
     public byte[] generarReporteCancionesPorProgramaExcel(Long programaId) {
         Programa programa = programaRepository.findById(programaId)
@@ -36,4 +46,22 @@ public class ReportService {
             throw new RuntimeException("Error al generar el archivo Excel", e);
         }
     }
+
+    public byte[] generarReporteEpisodiosPorPersonaExcel(Long personaId) {
+        Persona persona = personaRepository.findById(personaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada"));
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("persona", persona);
+
+        List<EpisodioReporteDto> episodios = reporteEpisodiosPorPersona.generar(params);
+
+        try {
+            return episodioExporter.generarExcel(episodios);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al generar el archivo Excel", e);
+        }
+    }
+    @Autowired
+    private ReporteEpisodiosPorPersonaStrategy reporteEpisodiosPorPersona;
 }

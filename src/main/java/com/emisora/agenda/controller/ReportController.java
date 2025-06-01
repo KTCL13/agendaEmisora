@@ -27,4 +27,15 @@ public class ReportController {
 
         return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/episodios/por-persona/excel")
+    public ResponseEntity<byte[]> downloadEpisodiosPorPersona(@RequestParam Long personaId) {
+        byte[] excelBytes = reportService.generarReporteEpisodiosPorPersonaExcel(personaId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "reporte_episodios_persona_" + personaId + ".xlsx");
+
+        return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
+    }
 }

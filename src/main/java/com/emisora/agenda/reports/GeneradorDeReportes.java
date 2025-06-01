@@ -17,6 +17,6 @@ public class GeneradorDeReportes {
     }
 
     public ReporteDTO generarReporte(Map<String, Object> parametros) {
-        return estrategiaActual.generar(parametros);
+        return (ReporteDTO) estrategiaActual.generar(parametros);
     }
 }
