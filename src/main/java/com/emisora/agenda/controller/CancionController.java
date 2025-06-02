@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -61,6 +62,34 @@ public class CancionController {
     public ResponseEntity<OperationResponseDTO> eliminarCancion(@PathVariable Long id) {
         cancionService.eliminarCancion(id);
         return ResponseEntity.ok(new OperationResponseDTO("Canción eliminada correctamente"));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CancionDTO>> buscarCanciones(
+            @RequestParam String term,
+    
+            @RequestParam(required = false) Integer page, 
+            @RequestParam(required = false) Integer size  
+    ) {
+        int limiteFijo = 10; 
+        List<CancionDTO> cancionesEncontradas = cancionService.buscarCanciones(term, limiteFijo);
+        
+        if (cancionesEncontradas.isEmpty()) {
+            return ResponseEntity.noContent().build(); 
+        }
+        return ResponseEntity.ok(cancionesEncontradas);
+    }
+
+    @GetMapping("/por-ids")
+    public ResponseEntity<List<CancionDTO>> obtenerCancionesPorListaDeIds(@RequestParam List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        List<CancionDTO> canciones = cancionService.obtenerCancionesPorIds(ids);
+        if (canciones.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        return ResponseEntity.ok(canciones);
     }
 
 }
