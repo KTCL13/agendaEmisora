@@ -16,7 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
+
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -37,8 +37,7 @@ public class Episodio {
 
     @Column(nullable = false)
     private String nombre;
-
-    @Lob 
+ 
     private String descripcion;
 
     @ElementCollection(fetch = FetchType.LAZY)

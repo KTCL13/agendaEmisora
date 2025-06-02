@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @DiscriminatorValue("FUNCIONARIO")
-public class FuncionarioRol extends Rol {
+public class FuncionarioRol extends RolInstitucional {
 
     private String dependencia;
 

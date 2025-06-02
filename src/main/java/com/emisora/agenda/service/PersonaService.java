@@ -1,19 +1,26 @@
 package com.emisora.agenda.service;
 
 import com.emisora.agenda.dto.PersonaDTO;
-import com.emisora.agenda.dto.RolDTO;
+import com.emisora.agenda.dto.RolInstitucionalDTO;
+import com.emisora.agenda.enums.EstadoPersona;
 import com.emisora.agenda.exceptions.ResourceNotFoundException;
 import com.emisora.agenda.mapper.PersonaMapper;
-import com.emisora.agenda.mapper.RolMapper;
+import com.emisora.agenda.mapper.RolInstitucionalMapper;
 import com.emisora.agenda.model.personas.Persona;
-import com.emisora.agenda.model.personas.Rol;
+import com.emisora.agenda.model.personas.RolInstitucional;
 import com.emisora.agenda.repository.PersonaRepository;
 
 import jakarta.transaction.Transactional;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -23,9 +30,9 @@ public class PersonaService {
     private final PersonaRepository personaRepo;
 
     private final PersonaMapper personaMapper;
-    private final RolMapper rolMapper;
+    private final RolInstitucionalMapper rolMapper;
 
-    public PersonaService(PersonaRepository personaRepo, PersonaMapper personaMapper, RolMapper rolMapper) {
+    public PersonaService(PersonaRepository personaRepo, PersonaMapper personaMapper, RolInstitucionalMapper rolMapper) {
         this.personaRepo = personaRepo;
         this.personaMapper = personaMapper;
         this.rolMapper = rolMapper;
@@ -36,19 +43,21 @@ public class PersonaService {
     public PersonaDTO crearPersonaConRoles(PersonaDTO requestDTO) {
         
         Persona persona = personaMapper.dtoToPersona(requestDTO);
+        persona.setFechaCreacionPersona(LocalDateTime.now());
+        persona.setEstado(com.emisora.agenda.enums.EstadoPersona.ACTIVO);
         
-        if (persona.getRoles() == null) {
-            persona.setRoles(new ArrayList<>());
+        if (persona.getRolesInstitucionales() == null) {
+            persona.setRolesInstitucionales(new ArrayList<>());
         }
-        if (requestDTO.getRoles() != null) {
-            for (RolDTO rolDto : requestDTO.getRoles()) {
-                Rol rolEntity = null;
+        if (requestDTO.getRolesInstitucionales() != null) {
+            for (RolInstitucionalDTO rolDto : requestDTO.getRolesInstitucionales()) {
+                RolInstitucional rolEntity = null;
 
                 switch (rolDto.getTipoRol().toUpperCase()) {
                     case "ESTUDIANTE":
                         rolEntity = rolMapper.dtoToEstudianteRol(rolDto);
                         break;
-                    case "PROFESOR":
+                    case "DOCENTE":
                         rolEntity = rolMapper.dtoToProfesorRol(rolDto);
                         break;
                     case "INVITADO":
@@ -73,7 +82,7 @@ public class PersonaService {
 
 
     public List<PersonaDTO> obtenerTodasLasPersonas() {
-        List<Persona> personas = personaRepo.findAll();
+        List<Persona> personas = personaRepo.findByEstado(EstadoPersona.ACTIVO);
         return personaMapper.toDtoList(personas);
     }
 
@@ -84,11 +93,12 @@ public class PersonaService {
         Persona personaExistente = personaRepo.findById(personaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada con id: " + personaId));
 
-        personaExistente.setNombres(personaDTO.getNombres());
-        personaExistente.setApellidos(personaDTO.getApellidos());
-        personaExistente.setTelefono(personaDTO.getTelefono());
+        personaExistente.setNombresPersona(personaDTO.getNombresPersona());
+        personaExistente.setApellidosPersona(personaDTO.getApellidosPersona());
+        personaExistente.setTelefonoPersona(personaDTO.getTelefonoPersona());
         personaExistente.setCorreo(personaDTO.getCorreo());
         personaExistente.setNumeroId(personaDTO.getNumeroId());
+        personaExistente.setFechaModificacionPersona(LocalDateTime.now());
         if (personaDTO.getTipoId() != null) {
             try {
 
@@ -97,19 +107,19 @@ public class PersonaService {
                 System.err.println("TipoId inválido proporcionado: " + personaDTO.getTipoId());
             }
         }
-        if (personaExistente.getRoles() == null) {
-            personaExistente.setRoles(new ArrayList<>());
+        if (personaExistente.getRolesInstitucionales() == null) {
+            personaExistente.setRolesInstitucionales(new ArrayList<>());
         }
       
-        List<Rol> rolesAntiguos = new ArrayList<>(personaExistente.getRoles());
-        for(Rol rolAntiguo : rolesAntiguos){
+        List<RolInstitucional> rolesAntiguos = new ArrayList<>(personaExistente.getRolesInstitucionales());
+        for(RolInstitucional rolAntiguo : rolesAntiguos){
             personaExistente.removeRol(rolAntiguo); 
         }
 
-        if (personaDTO.getRoles() != null) {
-            for (RolDTO rolDto : personaDTO.getRoles()) {
+        if (personaDTO.getRolesInstitucionales() != null) {
+            for (RolInstitucionalDTO rolDto : personaDTO.getRolesInstitucionales()) {
      
-                Rol nuevoRolEntity = convertirRolDtoAEntidad(rolDto);
+                RolInstitucional nuevoRolEntity = convertirRolDtoAEntidad(rolDto);
                 if (nuevoRolEntity != null) {
                     personaExistente.addRol(nuevoRolEntity);
                 }
@@ -126,17 +136,18 @@ public class PersonaService {
     public void eliminarPersona(Long id) {
         Persona personaExistente = personaRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Persona no encontrada con id: " + id));
-        personaRepo.delete(personaExistente);
+        personaExistente.setEstado(com.emisora.agenda.enums.EstadoPersona.INACTIVO);
+        personaRepo.save(personaExistente);
     }
 
-    private Rol convertirRolDtoAEntidad(RolDTO rolDto) {
+    private RolInstitucional convertirRolDtoAEntidad(RolInstitucionalDTO rolDto) {
         if (rolDto == null || rolDto.getTipoRol() == null) {
             return null;
         }
         switch (rolDto.getTipoRol().toUpperCase()) {
             case "ESTUDIANTE":
                 return rolMapper.dtoToEstudianteRol(rolDto);
-            case "PROFESOR":
+            case "DOCENTE":
                 return rolMapper.dtoToProfesorRol(rolDto);
             case "INVITADO":
                 return rolMapper.dtoToInvitadoRol(rolDto);
@@ -153,6 +164,32 @@ public class PersonaService {
         Persona persona = personaRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada con id: " + id));
         return personaMapper.toDto(persona);
+    }
+
+
+    public Page<PersonaDTO> getAllActivePersons(int page, int size, String ordenarPor, String direccionOrden, String searchTerm) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direccionOrden), ordenarPor));
+        Page<Persona> personasPage;
+
+    if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+        personasPage = personaRepo.findByEstadoAndTerminoBusqueda(EstadoPersona.ACTIVO, searchTerm, pageable);
+    } else {
+        personasPage = personaRepo.findByEstado(EstadoPersona.ACTIVO, pageable); 
+    }
+        return personasPage.map(personaMapper::toDto);
+    }
+
+
+    public List<PersonaDTO> obtenerPersonasPorIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Persona> personas = personaRepo.findAllById(ids);
+        if (personas.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron personas con los IDs proporcionados.");
+        }
+        return personaMapper.toDtoList(personas);
     }
 
 }

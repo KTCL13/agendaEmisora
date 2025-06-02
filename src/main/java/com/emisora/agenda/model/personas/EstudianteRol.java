@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("ESTUDIANTE")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class EstudianteRol extends Rol {
+public class EstudianteRol extends RolInstitucional {
     
     @Enumerated(EnumType.STRING) 
     private CarreraEnum carrera;

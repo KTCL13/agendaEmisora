@@ -8,16 +8,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProgramaDTO {
-
-
+@AllArgsConstructor
+public class EpisodioResponseDTO {
+    
     private Long id;
-    private String codigo;
-    private String categoria;
-    private String titulo;
+
+    private String nombre;
+
     private String descripcion;
-    private LocalDate fechaCreacion;
+
+    private List<LocalDate> fechasEmitidas;
+
+    private String duracion; 
 
 }

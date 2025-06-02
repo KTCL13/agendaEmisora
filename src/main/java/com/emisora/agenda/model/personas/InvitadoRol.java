@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @DiscriminatorValue("INVITADO")
-public class InvitadoRol extends Rol {
+public class InvitadoRol extends RolInstitucional {
 
     
 }
