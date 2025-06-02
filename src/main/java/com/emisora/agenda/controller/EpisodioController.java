@@ -30,11 +30,11 @@ public class EpisodioController {
     private final EpisodioService episodioService;
     
 
-    @GetMapping("{programaId}")
+    @GetMapping("por-programa/{programaId}")
     public ResponseEntity<Page<EpisodioResponseDTO>> obtenerEpisodiosPorPrograma(
             @PathVariable Long programaId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "10") int size,    
             @RequestParam(defaultValue = "nombre,asc") String[] sort) {
         System.out.println("Obteniendo episodios para el programa con ID: " + programaId);
         String ordenarPor = sort[0];
@@ -46,6 +46,14 @@ public class EpisodioController {
         return new ResponseEntity<>(episodios, HttpStatus.OK);
         
     }
+
+    @GetMapping ("{id}")
+    public ResponseEntity<EpisodioDTO> getEpisodioPorId(@PathVariable Long id) {
+        System.out.println("Obteniendo episodio con ID: " + id);
+        EpisodioDTO episodio = episodioService.obtenerEpisodioPorId(id);
+        return new ResponseEntity<>(episodio, HttpStatus.OK);
+    }
+
 
     @PostMapping("/{programaId}")
     public ResponseEntity<EpisodioResponseDTO> crearEpisodio(@PathVariable Long programaId, @Valid @RequestBody EpisodioDTO episodioDTO) {

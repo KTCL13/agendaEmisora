@@ -19,7 +19,7 @@ import com.emisora.agenda.repository.ProgramaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
-import org.checkerframework.checker.units.qual.s;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -72,11 +72,11 @@ public class EpisodioService {
     }
 
 
-    @Transactional(readOnly = true)
-    public EpisodioResponseDTO obtenerEpisodioPorId(Long id) {
+    @Transactional
+    public EpisodioDTO obtenerEpisodioPorId(Long id) {
         Episodio episodio = episodioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Episodio no encontrado con id: " + id));
-        return episodioMapper.episodioToEpisodioResponseDTO(episodio);
+        return episodioMapper.episodioToEpisodioDTO(episodio);
     }
 
  

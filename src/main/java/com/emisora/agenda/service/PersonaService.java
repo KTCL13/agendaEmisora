@@ -180,4 +180,16 @@ public class PersonaService {
         return personasPage.map(personaMapper::toDto);
     }
 
+
+    public List<PersonaDTO> obtenerPersonasPorIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Persona> personas = personaRepo.findAllById(ids);
+        if (personas.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontraron personas con los IDs proporcionados.");
+        }
+        return personaMapper.toDtoList(personas);
+    }
+
 }
