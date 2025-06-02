@@ -69,7 +69,7 @@ public class Episodio {
         joinColumns = @JoinColumn(name = "episodio_id"),
         inverseJoinColumns = @JoinColumn(name = "cancion_id")
     )
-    private Set<Cancion> canciones; 
+    private Set<Cancion> canciones;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

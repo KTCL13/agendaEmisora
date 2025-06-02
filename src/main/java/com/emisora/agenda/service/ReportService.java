@@ -1,30 +1,66 @@
 package com.emisora.agenda.service;
 
-import com.emisora.agenda.dto.ReporteDTO;
+import com.emisora.agenda.dto.CancionReporteDto;
+import com.emisora.agenda.dto.EpisodioReporteDto;
+import com.emisora.agenda.exceptions.ResourceNotFoundException;
 import com.emisora.agenda.model.Programa;
-import com.emisora.agenda.reports.ReporteCancionesPorPrograma;
+import com.emisora.agenda.model.personas.Persona;
+import com.emisora.agenda.reports.ExcelExporterEpisodioPorPersona;
+import com.emisora.agenda.reports.ExcelExporterCancionPorPrograma;
+import com.emisora.agenda.reports.ReporteEpisodiosPorPersona;
+import com.emisora.agenda.repository.PersonaRepository;
 import com.emisora.agenda.repository.ProgramaRepository;
-import com.emisora.agenda.reports.EstrategiaDeReporte;
-import com.emisora.agenda.reports.GeneradorDeReportes;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ReportService {
 
+    private final ProgramaRepository programaRepository;
+    private final PersonaRepository personaRepository;
+    private final ExcelExporterCancionPorPrograma cancionExporter;
+    private final ExcelExporterEpisodioPorPersona episodioExporter;
     @Autowired
-    private ProgramaRepository programaRepository;
+    private ReporteEpisodiosPorPersona reporteEpisodiosPorPersona;
 
-    public ReporteDTO generarReporteCancionesPorPrograma(Long programaId) {
+    public byte[] generarReporteCancionesPorProgramaExcel(Long programaId) {
         Programa programa = programaRepository.findById(programaId)
-                .orElseThrow(() -> new RuntimeException("Programa no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Programa no encontrado"));
 
-        EstrategiaDeReporte estrategia = new ReporteCancionesPorPrograma();
-        GeneradorDeReportes generador = new GeneradorDeReportes(estrategia);
+        List<CancionReporteDto> canciones = programa.getEpisodios().stream()
+                .flatMap(episodio -> episodio.getCanciones().stream())
+                .map(c -> new CancionReporteDto(c.getTitulo(), c.getArtista()))
+                .distinct()
+                .toList();
 
-        Map<String, Object> parametros = Map.of("programa", programa);
-        return generador.generarReporte(parametros);
+        try {
+            return cancionExporter.generarExcel(canciones);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al generar el archivo Excel", e);
+        }
     }
+
+    public byte[] generarReporteEpisodiosPorPersonaExcel(Long personaId) {
+        Persona persona = personaRepository.findById(personaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada"));
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("persona", persona);
+
+        List<EpisodioReporteDto> episodios = reporteEpisodiosPorPersona.generar(params);
+
+        try {
+            return episodioExporter.generarExcel(episodios);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al generar el archivo Excel", e);
+        }
+    }
+
 }
