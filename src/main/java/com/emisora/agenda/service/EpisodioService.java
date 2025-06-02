@@ -86,7 +86,6 @@ public class EpisodioService {
         Episodio episodioExistente = episodioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Episodio no encontrado con id: " + id));
 
-        // Actualizar campos básicos
         episodioExistente.setNombre(episodioDTO.getNombre());
         episodioExistente.setDescripcion(episodioDTO.getDescripcion());
         episodioExistente.setFechasEmitidas(episodioDTO.getFechasEmitidas());

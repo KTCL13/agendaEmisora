@@ -5,6 +5,7 @@ import com.emisora.agenda.dto.PersonaDTO;
 import com.emisora.agenda.service.PersonaService;
 import jakarta.validation.Valid;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,12 +60,12 @@ public class PersonaController {
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
 
+
     @GetMapping("/allPersonas")
     public ResponseEntity<List<PersonaDTO>> obtenerTodasLasPersonas() {
         List<PersonaDTO> personas = personaService.obtenerTodasLasPersonas();
         return new ResponseEntity<>(personas, HttpStatus.OK);
     }
-
 
 
 
@@ -80,5 +81,17 @@ public class PersonaController {
     public ResponseEntity<Void> eliminarPersona(@PathVariable Long id) {
         personaService.eliminarPersona(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+      @PostMapping("/buscarPorIds")
+    public ResponseEntity<List<PersonaDTO>> obtenerPersonasPorIds(@RequestBody List<Long> ids) {
+        System.out.println("Obteniendo personas por IDs: " + ids);
+        if (ids == null || ids.isEmpty()) {
+
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+        }
+        
+        List<PersonaDTO> personas = personaService.obtenerPersonasPorIds(ids);
+        return new ResponseEntity<>(personas, HttpStatus.OK);
     }
 }
