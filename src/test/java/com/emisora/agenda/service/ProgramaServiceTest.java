@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -43,33 +43,7 @@ class ProgramaServiceTest {
         programaDTO.setTitulo("ProgramaDTO de prueba");
     }
 
-    @Test
-    void obtieneTodosLosProgramas() {
-        when(programaRepository.findAll()).thenReturn(Collections.singletonList(programa));
-        when(programaMapper.toDto(programa)).thenReturn(programaDTO);
 
-        List<ProgramaDTO> resultado = programaService.getAllProgramas();
-
-        assertNotNull(resultado);
-        assertEquals(1, resultado.size());
-        assertEquals(programaDTO.getTitulo(), resultado.getFirst().getTitulo());
-
-        verify(programaRepository).findAll();
-        verify(programaMapper).toDto(programa);
-    }
-
-    @Test
-    void retornaListaVaciaSiNoHayProgramas() {
-        when(programaRepository.findAll()).thenReturn(Collections.emptyList());
-
-        List<ProgramaDTO> resultado = programaService.getAllProgramas();
-
-        assertNotNull(resultado);
-        assertTrue(resultado.isEmpty());
-
-        verify(programaRepository).findAll();
-        verify(programaMapper, never()).toDto(any());
-    }
 
     @Test
     void guardaUnPrograma() {

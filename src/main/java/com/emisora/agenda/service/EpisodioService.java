@@ -26,7 +26,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 
 @Service
@@ -78,7 +80,14 @@ public class EpisodioService {
         return episodioMapper.episodioToEpisodioDTO(episodio);
     }
 
- 
+    public List<EpisodioDTO> obtenerTodosLosEpisodios() {
+        List<Episodio> episodios = episodioRepository.findAll();
+        List<EpisodioDTO> episodioDTOs = new ArrayList<>();
+        for (Episodio episodio : episodios) {
+            episodioDTOs.add(episodioMapper.episodioToEpisodioDTO(episodio));
+        }
+        return episodioDTOs;
+    }
 
 
 
