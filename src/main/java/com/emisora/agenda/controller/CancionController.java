@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -77,6 +78,18 @@ public class CancionController {
             return ResponseEntity.noContent().build(); 
         }
         return ResponseEntity.ok(cancionesEncontradas);
+    }
+
+    @GetMapping("/por-ids")
+    public ResponseEntity<List<CancionDTO>> obtenerCancionesPorListaDeIds(@RequestParam List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        List<CancionDTO> canciones = cancionService.obtenerCancionesPorIds(ids);
+        if (canciones.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        return ResponseEntity.ok(canciones);
     }
 
 }

@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,5 +85,26 @@ public class CancionService {
                 .stream()
                 .map(cancionMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<CancionDTO> obtenerCancionesPorIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList(); // Devuelve lista vacía si no se proporcionan IDs
+        }
+        // Filtra cualquier ID nulo que pudiera venir en la lista para evitar errores con findAllById
+        List<Long> validIds = ids.stream()
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList());
+        
+        if (validIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Cancion> canciones = cancionRepository.findAllById(validIds);
+        return canciones.stream()
+                        .map(cancionMapper::toDto)
+                        .collect(Collectors.toList());
     }
 }       
