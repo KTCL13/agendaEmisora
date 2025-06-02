@@ -2,13 +2,15 @@ package com.emisora.agenda.model.personas;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 import com.emisora.agenda.enums.EstadoPersona;
 import com.emisora.agenda.enums.TipoId;
 
+import com.emisora.agenda.model.Episodio;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -46,5 +48,14 @@ public class Persona {
         this.rolesInstitucionales.remove(rol);
         rol.setPersona(null);
     }
+
+    @OneToMany(mappedBy = "productor")
+    private List<Episodio> productos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "locutor")
+    private List<Episodio> locuciones = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "invitados")
+    private Set<Episodio> episodiosDondeEsInvitado = new HashSet<>();
 
 }

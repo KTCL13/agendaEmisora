@@ -1,23 +1,24 @@
 package com.emisora.agenda.reports;
 
-import com.emisora.agenda.dto.ReporteDTO;
-import com.emisora.agenda.model.Cancion;
+import com.emisora.agenda.dto.CancionReporteDto;
 import com.emisora.agenda.model.Programa;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-public class ReporteCancionesPorPrograma implements EstrategiaDeReporte {
+@Component
+public class ReporteCancionesPorPrograma implements EstrategiaDeReporte<CancionReporteDto> {
 
     @Override
-    public ReporteDTO generar(Map<String, Object> parametros) {
+    public List<CancionReporteDto> generar(Map<String, Object> parametros) {
         Programa programa = (Programa) parametros.get("programa");
 
-        // Extraer todas las canciones de los episodios del programa
-        List<Cancion> canciones = programa.getEpisodios().stream()
+        // Generar listado de canciones únicas
+        return programa.getEpisodios().stream()
                 .flatMap(episodio -> episodio.getCanciones().stream())
+                .map(c -> new CancionReporteDto(c.getTitulo(), c.getArtista()))
                 .distinct()
                 .toList();
-        return new ReporteDTO("Canciones del Programa", canciones);
     }
 }

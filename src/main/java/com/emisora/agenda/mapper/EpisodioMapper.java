@@ -40,7 +40,6 @@ public interface EpisodioMapper {
     }
 
     default Set<Long> mapCancionesToIds(Set<Cancion> canciones) {
-        // Asumiendo que Cancion tiene un método getId()
         if (canciones == null) return null;
         return canciones.stream().map(Cancion::getId).collect(java.util.stream.Collectors.toSet());
     }
