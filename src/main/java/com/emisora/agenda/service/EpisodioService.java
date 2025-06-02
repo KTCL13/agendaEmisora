@@ -88,7 +88,6 @@ public class EpisodioService {
         Episodio episodioExistente = episodioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Episodio no encontrado con id: " + id));
 
-        // Actualizar campos básicos
         episodioExistente.setNombre(episodioDTO.getNombre());
         episodioExistente.setDescripcion(episodioDTO.getDescripcion());
         episodioExistente.setFechasEmitidas(episodioDTO.getFechasEmitidas());
@@ -102,10 +101,6 @@ public class EpisodioService {
         Persona locutor = personaRepository.findById(episodioDTO.getLocutorId())
                 .orElseThrow(() -> new EntityNotFoundException("Locutor no encontrado con id: " + episodioDTO.getLocutorId()));
         episodioExistente.setLocutor(locutor);
-
-        Programa programa = programaRepository.findById(episodioDTO.getProgramaId())
-                .orElseThrow(() -> new EntityNotFoundException("Programa no encontrado con id: " + episodioDTO.getProgramaId()));
-        episodioExistente.setPrograma(programa);
 
         // Actualizar relaciones ManyToMany
         if (episodioDTO.getInvitadosIds() != null) {
@@ -125,6 +120,7 @@ public class EpisodioService {
         Episodio episodioActualizado = episodioRepository.save(episodioExistente);
         return (episodioMapper.episodioToEpisodioDTO(episodioActualizado));
     }
+
 
     @Transactional
     public void eliminarEpisodio(Long id) {

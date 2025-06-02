@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CancionDTO {
+
+    private Long id;
+
     @NotBlank(message = "El título es obligatorio")
     private String titulo;
 

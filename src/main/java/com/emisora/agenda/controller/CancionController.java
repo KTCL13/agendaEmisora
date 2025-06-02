@@ -63,4 +63,20 @@ public class CancionController {
         return ResponseEntity.ok(new OperationResponseDTO("Canción eliminada correctamente"));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<CancionDTO>> buscarCanciones(
+            @RequestParam String term,
+    
+            @RequestParam(required = false) Integer page, 
+            @RequestParam(required = false) Integer size  
+    ) {
+        int limiteFijo = 10; 
+        List<CancionDTO> cancionesEncontradas = cancionService.buscarCanciones(term, limiteFijo);
+        
+        if (cancionesEncontradas.isEmpty()) {
+            return ResponseEntity.noContent().build(); 
+        }
+        return ResponseEntity.ok(cancionesEncontradas);
+    }
+
 }

@@ -8,7 +8,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface CancionMapper {
     CancionMapper INSTANCE = Mappers.getMapper(CancionMapper.class);
-
+    
     Cancion toEntity(CancionDTO dto);
+
     CancionDTO toDto(Cancion cancion);
 }

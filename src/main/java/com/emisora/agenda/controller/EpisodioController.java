@@ -64,6 +64,7 @@ public class EpisodioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EpisodioDTO> actualizarEpisodio(@PathVariable Long id, @Valid @RequestBody EpisodioDTO episodioDTO) {
+        System.out.println("Actualizando episodio con ID: " + id);
         EpisodioDTO episodioActualizado = episodioService.actualizarEpisodio(id, episodioDTO);
         return ResponseEntity.ok(episodioActualizado);
     }

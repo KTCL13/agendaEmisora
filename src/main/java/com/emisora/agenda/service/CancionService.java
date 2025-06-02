@@ -8,10 +8,16 @@ import com.emisora.agenda.model.Cancion;
 import com.emisora.agenda.repository.CancionRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,4 +68,20 @@ public class CancionService {
             throw new AppException("Ya existe una canción con ese título y artista", HttpStatus.CONFLICT);
         }
     }
-}
+
+    @Transactional(readOnly = true)
+    public List<CancionDTO> buscarCanciones(String term, int limit) {
+        if (term == null || term.trim().isEmpty()) {
+            return List.of(); 
+        }
+
+        Pageable pageable = PageRequest.of(0, limit); 
+        
+        Page<Cancion> paginaCanciones = cancionRepository.findByTituloOrArtistaContainingIgnoreCase(term, pageable);
+        
+        return paginaCanciones.getContent() 
+                .stream()
+                .map(cancionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+}       
