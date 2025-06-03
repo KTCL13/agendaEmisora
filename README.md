@@ -46,3 +46,5 @@ Se recomienda utilizar la versión más reciente del navegador
 Espacio en disco: ~200 MB
 
 Memoria RAM: Mínimo 4 GB, recomendado 8 GB o más
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/KTCL13/agendaEmisora)
