@@ -77,8 +77,15 @@ public class EpisodioService {
     public EpisodioDTO obtenerEpisodioPorId(Long id) {
         Episodio episodio = episodioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Episodio no encontrado con id: " + id));
-        return episodioMapper.episodioToEpisodioDTO(episodio);
+        if (episodio.getInvitados() != null) {
+        episodio.getInvitados().size();
+        }
+        if (episodio.getCanciones() != null) {
+            episodio.getCanciones().size(); 
+        }
+         return episodioMapper.episodioToEpisodioDTO(episodio);
     }
+    
 
     public List<EpisodioDTO> obtenerTodosLosEpisodios() {
         List<Episodio> episodios = episodioRepository.findAll();

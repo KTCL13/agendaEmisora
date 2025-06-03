@@ -15,6 +15,7 @@ public interface ProgramaMapper {
     ProgramaDTO toDto(Programa programa);
     
     @Mapping(target = "fechaCreacion", source = "fechaCreacion", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "estado", ignore = true)
     Programa toEntity(ProgramaDTO programaDTO); 
     
 }

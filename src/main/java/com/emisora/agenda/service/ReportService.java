@@ -78,4 +78,13 @@ public class ReportService {
         return new ReporteDTO("Canciones del Programa " + programa.getTitulo(), canciones);
     }
 
+    public ReporteDTO generarReporteEpisodiosPorPersona(Long personaId) {
+        Persona persona = personaRepository.findById(personaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Persona no encontrada"));
+        Map<String, Object> params = new HashMap<>();
+        params.put("persona", persona);
+        List<EpisodioReporteDto> episodios = reporteEpisodiosPorPersona.generar(params);
+        return new ReporteDTO("Episodios de " + persona.getNombresPersona(), episodios);
+    }
+
 }

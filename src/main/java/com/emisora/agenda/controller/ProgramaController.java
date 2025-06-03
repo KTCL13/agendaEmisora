@@ -76,11 +76,10 @@ public class ProgramaController {
         return new ResponseEntity<>(updatedPrograma, HttpStatus.OK);}
 
 
-    @DeleteMapping("/deletePrograma")
-    public ResponseEntity<Void> deletePrograma(@RequestBody Long id) {
+    @DeleteMapping("/deletePrograma/{id}")
+    public ResponseEntity<Void> deletePrograma(@PathVariable Long id) {
         programaService.deletePrograma(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    
 }

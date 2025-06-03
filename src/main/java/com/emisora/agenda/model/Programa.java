@@ -3,6 +3,8 @@ package com.emisora.agenda.model;
 import java.sql.Date;
 import java.util.List;
 
+import com.emisora.agenda.enums.EstadoEnum;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,7 @@ public class Programa {
     private String descripcion;
     private String categoria;
     private Date fechaCreacion;
+    private EstadoEnum estado;
 
     @OneToMany(mappedBy = "programa")
     private List<Episodio> episodios;

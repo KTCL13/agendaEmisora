@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -57,5 +58,21 @@ public class Persona {
 
     @ManyToMany(mappedBy = "invitados")
     private Set<Episodio> episodiosDondeEsInvitado = new HashSet<>();
+
+
+      @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+        Persona persona = (Persona) o;
+
+        return idPersona != null && idPersona.equals(persona.idPersona);
+    }
+
+    @Override
+    public int hashCode() {
+        return idPersona != null ? Objects.hash(idPersona) : getClass().hashCode();
+    }
 
 }

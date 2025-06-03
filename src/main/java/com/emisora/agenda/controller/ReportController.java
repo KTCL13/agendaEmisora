@@ -25,6 +25,11 @@ public class ReportController {
         return reportService.generarReporteCancionesPorPrograma(programaId);
     }
 
+    @GetMapping("/episodios/por-persona/{personaId}")
+    public ReporteDTO obtenerReporteEpisodiosPorPersona(@PathVariable Long personaId) {
+        System.out.println("Obteniendo reporte de episodios por persona con ID: " + personaId);
+        return reportService.generarReporteEpisodiosPorPersona(personaId);
+    }
 
     @GetMapping("/canciones/por-programa/excel/{programaId}")
     public ResponseEntity<byte[]> downloadCancionesPorPrograma(@PathVariable Long programaId) throws IOException {
@@ -38,8 +43,8 @@ public class ReportController {
         return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/episodios/por-persona/excel")
-    public ResponseEntity<byte[]> downloadEpisodiosPorPersona(@RequestParam Long personaId) {
+    @GetMapping("/episodios/por-persona/excel/{personaId}")
+    public ResponseEntity<byte[]> downloadEpisodiosPorPersona(@PathVariable Long personaId) {
         byte[] excelBytes = reportService.generarReporteEpisodiosPorPersonaExcel(personaId);
 
         HttpHeaders headers = new HttpHeaders();

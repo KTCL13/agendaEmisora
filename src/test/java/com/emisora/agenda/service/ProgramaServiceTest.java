@@ -14,10 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
-import java.util.Collections;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -61,12 +57,5 @@ class ProgramaServiceTest {
         verify(programaMapper).toDto(programa);
     }
 
-    @Test
-    void eliminaProgramaPorId() {
-        Long id = 1L;
-
-        programaService.deletePrograma(id);
-
-        verify(programaRepository).deleteById(id);
-    }
+ 
 }

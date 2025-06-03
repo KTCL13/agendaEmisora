@@ -36,12 +36,17 @@ public interface EpisodioMapper {
 
     default Set<Long> mapPersonasToIds(Set<Persona> personas) {
         if (personas == null) return null;
-        return personas.stream().map(Persona::getIdPersona).collect(java.util.stream.Collectors.toSet());
+        // Copia a una lista para evitar ConcurrentModificationException
+        return new java.util.ArrayList<>(personas).stream()
+            .map(Persona::getIdPersona)
+            .collect(java.util.stream.Collectors.toSet());
     }
 
     default Set<Long> mapCancionesToIds(Set<Cancion> canciones) {
         if (canciones == null) return null;
-        return canciones.stream().map(Cancion::getId).collect(java.util.stream.Collectors.toSet());
+        return new java.util.ArrayList<>(canciones).stream()
+            .map(Cancion::getId)
+            .collect(java.util.stream.Collectors.toSet());
     }
 
 }
