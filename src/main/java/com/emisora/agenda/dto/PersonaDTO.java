@@ -1,24 +1,49 @@
 package com.emisora.agenda.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
-public class PersonaDTO {
-    private String nombre;
+import com.emisora.agenda.enums.EstadoPersona;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PersonaDTO {  
+
+    private Long idPersona;
+
+    @NotBlank
+    private String nombresPersona;
+
+    @NotBlank
+    private String apellidosPersona;
+
+    @NotBlank
+    private String telefonoPersona;
+
+    @NotBlank
     private String correo;
-    private List<RolDTO> roles;
 
-    public PersonaDTO() {}
+    @NotBlank
+    private String numeroId;
 
-    public PersonaDTO(String nombre, String correo, List<RolDTO> roles) {
-        this.nombre = nombre;
-        this.correo = correo;
-        this.roles = roles;
-    }
+    @NotBlank
+    private String tipoId; 
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
-    public List<RolDTO> getRoles() { return roles; }
-    public void setRoles(List<RolDTO> roles) { this.roles = roles; }
+    @Valid
+    private List<RolInstitucionalDTO> rolesInstitucionales;
+
+
+    private EstadoPersona estado;
+
+    private LocalDate fechaCreacionPersona;
+
+    private LocalDate fechaModificacionPersona;
+
 }
