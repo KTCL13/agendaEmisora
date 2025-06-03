@@ -1,7 +1,9 @@
 package com.emisora.agenda.service;
 
+import com.emisora.agenda.dto.CancionDTO;
 import com.emisora.agenda.dto.CancionReporteDto;
 import com.emisora.agenda.dto.EpisodioReporteDto;
+import com.emisora.agenda.dto.ReporteDTO;
 import com.emisora.agenda.exceptions.ResourceNotFoundException;
 import com.emisora.agenda.model.Programa;
 import com.emisora.agenda.model.personas.Persona;
@@ -61,6 +63,19 @@ public class ReportService {
         } catch (IOException e) {
             throw new RuntimeException("Error al generar el archivo Excel", e);
         }
+    }
+
+    public ReporteDTO generarReporteCancionesPorPrograma(Long programaId) {
+        Programa programa = programaRepository.findById(programaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Programa no encontrado"));
+
+        List<CancionDTO> canciones = programa.getEpisodios().stream()
+                .flatMap(episodio -> episodio.getCanciones().stream())
+                .map(c -> new CancionDTO(c.getId(),c.getTitulo(), c.getArtista()))
+                .distinct()
+                .toList();
+
+        return new ReporteDTO("Canciones del Programa " + programa.getTitulo(), canciones);
     }
 
 }

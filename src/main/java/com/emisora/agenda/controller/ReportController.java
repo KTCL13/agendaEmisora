@@ -1,7 +1,9 @@
 package com.emisora.agenda.controller;
 
+import com.emisora.agenda.dto.ReporteDTO;
 import com.emisora.agenda.service.ReportService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +19,16 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    
 
-    @GetMapping("/canciones/por-programa/excel")
-    public ResponseEntity<byte[]> downloadCancionesPorPrograma(@RequestParam Long programaId) throws IOException {
+    @GetMapping("/canciones/por-programa/{programaId}")
+    public ReporteDTO obtenerReporteCancionesPorPrograma(@PathVariable Long programaId) {
+        return reportService.generarReporteCancionesPorPrograma(programaId);
+    }
+
+
+    @GetMapping("/canciones/por-programa/excel/{programaId}")
+    public ResponseEntity<byte[]> downloadCancionesPorPrograma(@PathVariable Long programaId) throws IOException {
+        System.out.println("Descargando reporte de canciones por programa con ID: " + programaId);
         byte[] excelBytes = reportService.generarReporteCancionesPorProgramaExcel(programaId);
 
         HttpHeaders headers = new HttpHeaders();
