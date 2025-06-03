@@ -43,6 +43,6 @@ public class EpisodioDTO {
 
     private Set<Long> invitadosIds;
     private Set<Long> cancionIds;
-    private Set<Long> referenciaIds;
+
 
 }

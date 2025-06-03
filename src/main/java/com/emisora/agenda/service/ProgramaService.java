@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.emisora.agenda.dto.ProgramaDTO;
+import com.emisora.agenda.enums.EstadoEnum;
 import com.emisora.agenda.mapper.ProgramaMapper;
 import com.emisora.agenda.model.Programa;
 import com.emisora.agenda.repository.ProgramaRepository;
@@ -31,15 +32,17 @@ public class ProgramaService {
         Page<Programa> programasPage;
 
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-            programasPage = programaRepository.findByTerminoBusqueda(searchTerm, pageable);
+            programasPage = programaRepository.findByTerminoBusqueda(EstadoEnum.ACTIVO, searchTerm, pageable);
         } else {
-            programasPage = programaRepository.findAll(pageable);
+            programasPage = programaRepository.findByEstado(EstadoEnum.ACTIVO, pageable);
         }
         return programasPage.map(programaMapper::toDto);
     }
 
     public ProgramaDTO savePrograma(ProgramaDTO programaDTO) {
-        Programa programa = programaRepository.save(programaMapper.toEntity(programaDTO));
+        Programa programa = programaMapper.toEntity(programaDTO);
+        programa.setEstado(EstadoEnum.ACTIVO);
+        programa = programaRepository.save(programa);
         return programaMapper.toDto(programa);
     }
 
@@ -55,7 +58,10 @@ public class ProgramaService {
 
 
     public void deletePrograma(Long id) {
-        programaRepository.deleteById(id);
+       Programa programa = programaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Programa no encontrado con ID: " + id));
+        programa.setEstado(EstadoEnum.INACTIVO);
+        programaRepository.save(programa);
     }
 
     public ProgramaDTO getProgramaById(Long id) {

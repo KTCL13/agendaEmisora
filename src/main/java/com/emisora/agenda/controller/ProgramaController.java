@@ -33,7 +33,7 @@ public class ProgramaController {
     public ResponseEntity<Page<ProgramaDTO>> getAllProgramas(  
         @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "nombresPersona,asc") String[] sort,
+            @RequestParam(defaultValue = "titulo,asc") String[] sort,
             @RequestParam(required = false) String searchTerm) {
 
             String ordenarPor = sort[0];
@@ -76,11 +76,10 @@ public class ProgramaController {
         return new ResponseEntity<>(updatedPrograma, HttpStatus.OK);}
 
 
-    @DeleteMapping("/deletePrograma")
-    public ResponseEntity<Void> deletePrograma(@RequestBody Long id) {
+    @DeleteMapping("/deletePrograma/{id}")
+    public ResponseEntity<Void> deletePrograma(@PathVariable Long id) {
         programaService.deletePrograma(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    
 }

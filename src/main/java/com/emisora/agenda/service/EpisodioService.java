@@ -25,7 +25,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 
 @Service
@@ -70,14 +72,28 @@ public class EpisodioService {
     }
 
 
-    @Transactional(readOnly = true)
-    public EpisodioResponseDTO obtenerEpisodioPorId(Long id) {
+    @Transactional
+    public EpisodioDTO obtenerEpisodioPorId(Long id) {
         Episodio episodio = episodioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Episodio no encontrado con id: " + id));
-        return episodioMapper.episodioToEpisodioResponseDTO(episodio);
+        if (episodio.getInvitados() != null) {
+        episodio.getInvitados().size();
+        }
+        if (episodio.getCanciones() != null) {
+            episodio.getCanciones().size();
+        }
+         return episodioMapper.episodioToEpisodioDTO(episodio);
     }
 
- 
+
+    public List<EpisodioDTO> obtenerTodosLosEpisodios() {
+        List<Episodio> episodios = episodioRepository.findAll();
+        List<EpisodioDTO> episodioDTOs = new ArrayList<>();
+        for (Episodio episodio : episodios) {
+            episodioDTOs.add(episodioMapper.episodioToEpisodioDTO(episodio));
+        }
+        return episodioDTOs;
+    }
 
 
 
