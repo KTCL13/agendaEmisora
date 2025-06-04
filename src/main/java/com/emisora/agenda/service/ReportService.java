@@ -29,8 +29,7 @@ public class ReportService {
     private final PersonaRepository personaRepository;
     private final ExcelExporterCancionPorPrograma cancionExporter;
     private final ExcelExporterEpisodioPorPersona episodioExporter;
-    @Autowired
-    private ReporteEpisodiosPorPersona reporteEpisodiosPorPersona;
+    private final ReporteEpisodiosPorPersona reporteEpisodiosPorPersona;
 
     public byte[] generarReporteCancionesPorProgramaExcel(Long programaId) {
         Programa programa = programaRepository.findById(programaId)

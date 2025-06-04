@@ -26,8 +26,6 @@ class EpisodioServiceTest {
 
     @Mock private EpisodioRepository episodioRepository;
     @Mock private PersonaRepository personaRepository;
-    @Mock private ProgramaRepository programaRepository;
-    @Mock private CancionRepository cancionRepository;
     @Mock private EpisodioMapper episodioMapper;
 
     @InjectMocks
