@@ -18,7 +18,6 @@ import com.emisora.agenda.repository.ProgramaRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -81,11 +80,11 @@ public class EpisodioService {
         episodio.getInvitados().size();
         }
         if (episodio.getCanciones() != null) {
-            episodio.getCanciones().size(); 
+            episodio.getCanciones().size();
         }
          return episodioMapper.episodioToEpisodioDTO(episodio);
     }
-    
+
 
     public List<EpisodioDTO> obtenerTodosLosEpisodios() {
         List<Episodio> episodios = episodioRepository.findAll();
@@ -116,6 +115,10 @@ public class EpisodioService {
         Persona locutor = personaRepository.findById(episodioDTO.getLocutorId())
                 .orElseThrow(() -> new EntityNotFoundException("Locutor no encontrado con id: " + episodioDTO.getLocutorId()));
         episodioExistente.setLocutor(locutor);
+
+        Programa programa = programaRepository.findById(episodioDTO.getProgramaId())
+                .orElseThrow(() -> new EntityNotFoundException("Programa no encontrado con id: " + episodioDTO.getProgramaId()));
+        episodioExistente.setPrograma(programa);
 
         // Actualizar relaciones ManyToMany
         if (episodioDTO.getInvitadosIds() != null) {

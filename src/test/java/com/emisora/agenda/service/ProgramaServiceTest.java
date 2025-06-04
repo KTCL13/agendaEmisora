@@ -5,7 +5,6 @@ import com.emisora.agenda.mapper.ProgramaMapper;
 import com.emisora.agenda.model.Programa;
 import com.emisora.agenda.repository.ProgramaRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
